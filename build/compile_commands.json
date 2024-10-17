@@ -8,5 +8,15 @@
   "directory": "/home/ace/llvm-project/project/build",
   "command": "/usr/bin/g++ -I/usr/lib/llvm-14/include -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -o CMakeFiles/expr.dir/lexer.cpp.o -c /home/ace/llvm-project/project/lexer.cpp",
   "file": "/home/ace/llvm-project/project/lexer.cpp"
+},
+{
+  "directory": "/home/ace/llvm-project/project/build",
+  "command": "/usr/bin/g++ -I/usr/lib/llvm-14/include -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -o CMakeFiles/expr.dir/parser.cpp.o -c /home/ace/llvm-project/project/parser.cpp",
+  "file": "/home/ace/llvm-project/project/parser.cpp"
+},
+{
+  "directory": "/home/ace/llvm-project/project/build",
+  "command": "/usr/bin/g++ -I/usr/lib/llvm-14/include -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -o CMakeFiles/expr.dir/printVisitor.cpp.o -c /home/ace/llvm-project/project/printVisitor.cpp",
+  "file": "/home/ace/llvm-project/project/printVisitor.cpp"
 }
 ]

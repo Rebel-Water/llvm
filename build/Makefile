@@ -216,6 +216,54 @@ main.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+parser.o: parser.cpp.o
+.PHONY : parser.o
+
+# target to build an object file
+parser.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/parser.cpp.o
+.PHONY : parser.cpp.o
+
+parser.i: parser.cpp.i
+.PHONY : parser.i
+
+# target to preprocess a source file
+parser.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/parser.cpp.i
+.PHONY : parser.cpp.i
+
+parser.s: parser.cpp.s
+.PHONY : parser.s
+
+# target to generate assembly for a file
+parser.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/parser.cpp.s
+.PHONY : parser.cpp.s
+
+printVisitor.o: printVisitor.cpp.o
+.PHONY : printVisitor.o
+
+# target to build an object file
+printVisitor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cpp.o
+.PHONY : printVisitor.cpp.o
+
+printVisitor.i: printVisitor.cpp.i
+.PHONY : printVisitor.i
+
+# target to preprocess a source file
+printVisitor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cpp.i
+.PHONY : printVisitor.cpp.i
+
+printVisitor.s: printVisitor.cpp.s
+.PHONY : printVisitor.s
+
+# target to generate assembly for a file
+printVisitor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cpp.s
+.PHONY : printVisitor.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -234,6 +282,12 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... parser.o"
+	@echo "... parser.i"
+	@echo "... parser.s"
+	@echo "... printVisitor.o"
+	@echo "... printVisitor.i"
+	@echo "... printVisitor.s"
 .PHONY : help
 
 

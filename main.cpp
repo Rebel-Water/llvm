@@ -1,4 +1,7 @@
 #include "lexer.hpp"
+#include "printVisitor.hpp"
+#include "parser.hpp"
+#include "ast.hpp"
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/ErrorOr.h"
 #include <iostream>
@@ -16,12 +19,9 @@ int main(int argc, char* argv[]) {
     }
     auto memBuf = std::move(*buf);
     Lexer lex(memBuf->getBuffer());
-    Token token;
-    while(true) {
-        lex.NextToken(token);
-        if(token.tokenType == TokenType::eof)
-            break;
-        token.Dump();
-    }
+    Parser parser(lex);
+    auto program = parser.ParseProgram();
+    PrintVisitor print(program);
+    
     return 0;
 }

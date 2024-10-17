@@ -4,6 +4,7 @@ project(expr)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Debug)
 
 set(EXECUTABLE_OUTPUT_PATH bin)
 
@@ -18,4 +19,4 @@ if(NOT ${LLVM_ENABLE_RTTI})
 endif()
 
 set(LLVM_LINK_COMPONENTS Support core)
-add_llvm_executable(${PROJECT_NAME} main.cpp lexer.cpp)
+add_llvm_executable(${PROJECT_NAME} main.cpp lexer.cpp parser.cpp printVisitor.cpp)

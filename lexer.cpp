@@ -52,7 +52,7 @@ void Lexer::NextToken(Token &token)
         switch (*BufPtr++)
         {
         case '+':
-            token.tokenType = TokenType::number;
+            token.tokenType = TokenType::plus;
             break;
         case '-':
             token.tokenType = TokenType::minus;
