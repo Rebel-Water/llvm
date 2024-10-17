@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /home/ace/llvm-project/project/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/llvm_hello_world.dir/all
+all: CMakeFiles/expr.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -74,7 +74,7 @@ preinstall:
 clean: CMakeFiles/intrinsics_gen.dir/clean
 clean: CMakeFiles/omp_gen.dir/clean
 clean: CMakeFiles/acc_gen.dir/clean
-clean: CMakeFiles/llvm_hello_world.dir/clean
+clean: CMakeFiles/expr.dir/clean
 .PHONY : clean
 
 #=============================================================================
@@ -156,30 +156,30 @@ CMakeFiles/acc_gen.dir/clean:
 .PHONY : CMakeFiles/acc_gen.dir/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/llvm_hello_world.dir
+# Target rules for target CMakeFiles/expr.dir
 
 # All Build rule for target.
-CMakeFiles/llvm_hello_world.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ace/llvm-project/project/build/CMakeFiles --progress-num=1,2 "Built target llvm_hello_world"
-.PHONY : CMakeFiles/llvm_hello_world.dir/all
+CMakeFiles/expr.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ace/llvm-project/project/build/CMakeFiles --progress-num=1,2,3 "Built target expr"
+.PHONY : CMakeFiles/expr.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/llvm_hello_world.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ace/llvm-project/project/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/llvm_hello_world.dir/all
+CMakeFiles/expr.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/ace/llvm-project/project/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/expr.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/ace/llvm-project/project/build/CMakeFiles 0
-.PHONY : CMakeFiles/llvm_hello_world.dir/rule
+.PHONY : CMakeFiles/expr.dir/rule
 
 # Convenience name for target.
-llvm_hello_world: CMakeFiles/llvm_hello_world.dir/rule
-.PHONY : llvm_hello_world
+expr: CMakeFiles/expr.dir/rule
+.PHONY : expr
 
 # clean rule for target.
-CMakeFiles/llvm_hello_world.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/clean
-.PHONY : CMakeFiles/llvm_hello_world.dir/clean
+CMakeFiles/expr.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/clean
+.PHONY : CMakeFiles/expr.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

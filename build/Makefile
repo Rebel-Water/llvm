@@ -156,24 +156,48 @@ acc_gen/fast:
 .PHONY : acc_gen/fast
 
 #=============================================================================
-# Target rules for targets named llvm_hello_world
+# Target rules for targets named expr
 
 # Build rule for target.
-llvm_hello_world: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 llvm_hello_world
-.PHONY : llvm_hello_world
+expr: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 expr
+.PHONY : expr
 
 # fast build rule for target.
-llvm_hello_world/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/build
-.PHONY : llvm_hello_world/fast
+expr/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/build
+.PHONY : expr/fast
+
+lexer.o: lexer.cpp.o
+.PHONY : lexer.o
+
+# target to build an object file
+lexer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/lexer.cpp.o
+.PHONY : lexer.cpp.o
+
+lexer.i: lexer.cpp.i
+.PHONY : lexer.i
+
+# target to preprocess a source file
+lexer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/lexer.cpp.i
+.PHONY : lexer.cpp.i
+
+lexer.s: lexer.cpp.s
+.PHONY : lexer.s
+
+# target to generate assembly for a file
+lexer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/lexer.cpp.s
+.PHONY : lexer.cpp.s
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -181,7 +205,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -189,7 +213,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/llvm_hello_world.dir/build.make CMakeFiles/llvm_hello_world.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -203,7 +227,10 @@ help:
 	@echo "... acc_gen"
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
-	@echo "... llvm_hello_world"
+	@echo "... expr"
+	@echo "... lexer.o"
+	@echo "... lexer.i"
+	@echo "... lexer.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

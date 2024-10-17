@@ -8,7 +8,8 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/home/ace/llvm-project/project/main.cpp" "CMakeFiles/llvm_hello_world.dir/main.cpp.o" "gcc" "CMakeFiles/llvm_hello_world.dir/main.cpp.o.d"
+  "/home/ace/llvm-project/project/lexer.cpp" "CMakeFiles/expr.dir/lexer.cpp.o" "gcc" "CMakeFiles/expr.dir/lexer.cpp.o.d"
+  "/home/ace/llvm-project/project/main.cpp" "CMakeFiles/expr.dir/main.cpp.o" "gcc" "CMakeFiles/expr.dir/main.cpp.o.d"
   )
 
 # Targets to which this target links.

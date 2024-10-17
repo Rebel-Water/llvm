@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "bin/llvm_hello_world"
+			"path" : "bin/expr"
 		}
 	],
 	"backtrace" : 2,
@@ -30,7 +30,7 @@
 			{
 				"command" : 1,
 				"file" : 1,
-				"line" : 22,
+				"line" : 21,
 				"parent" : 0
 			},
 			{
@@ -54,7 +54,7 @@
 			{
 				"command" : 4,
 				"file" : 1,
-				"line" : 14,
+				"line" : 13,
 				"parent" : 0
 			}
 		]
@@ -89,11 +89,12 @@
 			},
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
-	"id" : "llvm_hello_world::@6890427a1f51a3e7e1df",
+	"id" : "expr::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -118,8 +119,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "llvm_hello_world",
-	"nameOnDisk" : "llvm_hello_world",
+	"name" : "expr",
+	"nameOnDisk" : "expr",
 	"paths" : 
 	{
 		"build" : ".",
@@ -131,7 +132,8 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -141,6 +143,12 @@
 			"backtrace" : 2,
 			"compileGroupIndex" : 0,
 			"path" : "main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 2,
+			"compileGroupIndex" : 0,
+			"path" : "lexer.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

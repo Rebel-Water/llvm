@@ -11,7 +11,7 @@
 # =============================================================================
 
 # =============================================================================
-# Project: llvm_hello_world
+# Project: expr
 # Configurations: Debug
 # =============================================================================
 
@@ -59,38 +59,45 @@ build omp_gen: phony
 build acc_gen: phony
 
 # =============================================================================
-# Object build statements for EXECUTABLE target llvm_hello_world
+# Object build statements for EXECUTABLE target expr
 
 
 #############################################
-# Order-only phony target for llvm_hello_world
+# Order-only phony target for expr
 
-build cmake_object_order_depends_target_llvm_hello_world: phony || CMakeFiles/llvm_hello_world.dir
+build cmake_object_order_depends_target_expr: phony || CMakeFiles/expr.dir
 
-build CMakeFiles/llvm_hello_world.dir/main.cpp.o: CXX_COMPILER__llvm_hello_world_Debug /home/ace/llvm-project/project/main.cpp || cmake_object_order_depends_target_llvm_hello_world
-  DEP_FILE = CMakeFiles/llvm_hello_world.dir/main.cpp.o.d
+build CMakeFiles/expr.dir/main.cpp.o: CXX_COMPILER__expr_Debug /home/ace/llvm-project/project/main.cpp || cmake_object_order_depends_target_expr
+  DEP_FILE = CMakeFiles/expr.dir/main.cpp.o.d
   FLAGS = -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions
   INCLUDES = -I/usr/lib/llvm-14/include
-  OBJECT_DIR = CMakeFiles/llvm_hello_world.dir
-  OBJECT_FILE_DIR = CMakeFiles/llvm_hello_world.dir
+  OBJECT_DIR = CMakeFiles/expr.dir
+  OBJECT_FILE_DIR = CMakeFiles/expr.dir
+
+build CMakeFiles/expr.dir/lexer.cpp.o: CXX_COMPILER__expr_Debug /home/ace/llvm-project/project/lexer.cpp || cmake_object_order_depends_target_expr
+  DEP_FILE = CMakeFiles/expr.dir/lexer.cpp.o.d
+  FLAGS = -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions
+  INCLUDES = -I/usr/lib/llvm-14/include
+  OBJECT_DIR = CMakeFiles/expr.dir
+  OBJECT_FILE_DIR = CMakeFiles/expr.dir
 
 
 # =============================================================================
-# Link build statements for EXECUTABLE target llvm_hello_world
+# Link build statements for EXECUTABLE target expr
 
 
 #############################################
-# Link the executable bin/llvm_hello_world
+# Link the executable bin/expr
 
-build bin/llvm_hello_world: CXX_EXECUTABLE_LINKER__llvm_hello_world_Debug CMakeFiles/llvm_hello_world.dir/main.cpp.o | /usr/lib/llvm-14/lib/libLLVM-14.so.1
+build bin/expr: CXX_EXECUTABLE_LINKER__expr_Debug CMakeFiles/expr.dir/main.cpp.o CMakeFiles/expr.dir/lexer.cpp.o | /usr/lib/llvm-14/lib/libLLVM-14.so.1
   FLAGS = -g
   LINK_FLAGS = -Wl,-rpath-link,  -Wl,--gc-sections
   LINK_LIBRARIES = -Wl,-rpath,"\$$ORIGIN/../lib:/usr/lib/llvm-14/lib"  /usr/lib/llvm-14/lib/libLLVM-14.so.1
-  OBJECT_DIR = CMakeFiles/llvm_hello_world.dir
+  OBJECT_DIR = CMakeFiles/expr.dir
   POST_BUILD = :
   PRE_LINK = :
-  TARGET_FILE = bin/llvm_hello_world
-  TARGET_PDB = llvm_hello_world.dbg
+  TARGET_FILE = bin/expr
+  TARGET_PDB = expr.dbg
 
 
 #############################################
@@ -118,7 +125,7 @@ build rebuild_cache: phony CMakeFiles/rebuild_cache.util
 # =============================================================================
 # Target aliases.
 
-build llvm_hello_world: phony bin/llvm_hello_world
+build expr: phony bin/expr
 
 # =============================================================================
 # Folder targets.
@@ -128,7 +135,7 @@ build llvm_hello_world: phony bin/llvm_hello_world
 #############################################
 # Folder: /home/ace/llvm-project/project/build
 
-build all: phony bin/llvm_hello_world
+build all: phony bin/expr
 
 # =============================================================================
 # Built-in targets

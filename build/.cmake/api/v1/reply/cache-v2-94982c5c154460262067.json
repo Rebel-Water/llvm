@@ -139,10 +139,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "CXX compiler"
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "STRING",
 			"value" : "/usr/bin/g++"
 		},
 		{
@@ -267,10 +267,10 @@
 				},
 				{
 					"name" : "HELPSTRING",
-					"value" : "No help, variable specified on the command line."
+					"value" : "C compiler"
 				}
 			],
-			"type" : "FILEPATH",
+			"type" : "STRING",
 			"value" : "/usr/bin/gcc"
 		},
 		{
@@ -1075,7 +1075,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "llvm_hello_world"
+			"value" : "expr"
 		},
 		{
 			"name" : "CMAKE_RANLIB",
@@ -2150,7 +2150,7 @@
 			"value" : "1"
 		},
 		{
-			"name" : "llvm_hello_world_BINARY_DIR",
+			"name" : "expr_BINARY_DIR",
 			"properties" : 
 			[
 				{
@@ -2162,7 +2162,7 @@
 			"value" : "/home/ace/llvm-project/project/build"
 		},
 		{
-			"name" : "llvm_hello_world_IS_TOP_LEVEL",
+			"name" : "expr_IS_TOP_LEVEL",
 			"properties" : 
 			[
 				{
@@ -2174,7 +2174,7 @@
 			"value" : "ON"
 		},
 		{
-			"name" : "llvm_hello_world_SOURCE_DIR",
+			"name" : "expr_SOURCE_DIR",
 			"properties" : 
 			[
 				{

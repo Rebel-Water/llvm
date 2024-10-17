@@ -1,12 +1,11 @@
 cmake_minimum_required(VERSION 3.18)
 
-project(llvm_hello_world)
+project(expr)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_CXX_STANDARD 17)
 
 set(EXECUTABLE_OUTPUT_PATH bin)
-# add_executable(${PROJECT_NAME} main.cpp)
 
 find_package(LLVM REQUIRED CONFIG)
 list(APPEND CMAKE_MODULE_PATH ${LLVM_CMAKE_DIR})
@@ -19,4 +18,4 @@ if(NOT ${LLVM_ENABLE_RTTI})
 endif()
 
 set(LLVM_LINK_COMPONENTS Support core)
-add_llvm_executable(${PROJECT_NAME} main.cpp)
+add_llvm_executable(${PROJECT_NAME} main.cpp lexer.cpp)
