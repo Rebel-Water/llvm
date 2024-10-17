@@ -1,0 +1,6 @@
+/home/ace/llvm-project/project/build/CMakeFiles/intrinsics_gen.dir
+/home/ace/llvm-project/project/build/CMakeFiles/omp_gen.dir
+/home/ace/llvm-project/project/build/CMakeFiles/acc_gen.dir
+/home/ace/llvm-project/project/build/CMakeFiles/llvm_hello_world.dir
+/home/ace/llvm-project/project/build/CMakeFiles/edit_cache.dir
+/home/ace/llvm-project/project/build/CMakeFiles/rebuild_cache.dir
