@@ -1,5 +1,6 @@
 #include "lexer.hpp"
 #include "printVisitor.hpp"
+#include "codegen.hpp"
 #include "parser.hpp"
 #include "ast.hpp"
 #include "llvm/Support/MemoryBuffer.h"
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
     Lexer lex(memBuf->getBuffer());
     Parser parser(lex);
     auto program = parser.ParseProgram();
-    PrintVisitor print(program);
+    Codegen codegen(program);
     
     return 0;
 }

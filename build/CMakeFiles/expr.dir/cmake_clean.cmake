@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/expr.dir/codegen.cpp.o"
+  "CMakeFiles/expr.dir/codegen.cpp.o.d"
   "CMakeFiles/expr.dir/lexer.cpp.o"
   "CMakeFiles/expr.dir/lexer.cpp.o.d"
   "CMakeFiles/expr.dir/main.cpp.o"

@@ -168,6 +168,30 @@ expr/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/build
 .PHONY : expr/fast
 
+codegen.o: codegen.cpp.o
+.PHONY : codegen.o
+
+# target to build an object file
+codegen.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/codegen.cpp.o
+.PHONY : codegen.cpp.o
+
+codegen.i: codegen.cpp.i
+.PHONY : codegen.i
+
+# target to preprocess a source file
+codegen.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/codegen.cpp.i
+.PHONY : codegen.cpp.i
+
+codegen.s: codegen.cpp.s
+.PHONY : codegen.s
+
+# target to generate assembly for a file
+codegen.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/codegen.cpp.s
+.PHONY : codegen.cpp.s
+
 lexer.o: lexer.cpp.o
 .PHONY : lexer.o
 
@@ -276,6 +300,9 @@ help:
 	@echo "... intrinsics_gen"
 	@echo "... omp_gen"
 	@echo "... expr"
+	@echo "... codegen.o"
+	@echo "... codegen.i"
+	@echo "... codegen.s"
 	@echo "... lexer.o"
 	@echo "... lexer.i"
 	@echo "... lexer.s"

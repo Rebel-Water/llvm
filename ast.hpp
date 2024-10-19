@@ -1,18 +1,20 @@
 #pragma once
 #include <memory>
 #include <vector>
+#include "llvm/IR/Value.h"
 
 struct Program;
 struct Expr;
 struct BinaryExpr;
 struct FactorExpr;
 
-struct Visitor {
-    virtual ~Visitor() {}
-    virtual void VisitrProgram(Program* p) = 0;
-    virtual void VisitExpr(Expr* expr) {}
-    virtual void VisitBinaryExpr(BinaryExpr* binaryExpr) = 0; 
-    virtual void VisitFactorExpr(FactorExpr* factorExpr) = 0;
+class Visitor {
+    public:
+    virtual ~Visitor() = default;
+    virtual llvm::Value* VisitrProgram(Program* p) = 0;
+    virtual llvm::Value* VisitExpr(Expr* expr) { return nullptr; }
+    virtual llvm::Value* VisitBinaryExpr(BinaryExpr* binaryExpr) = 0; 
+    virtual llvm::Value* VisitFactorExpr(FactorExpr* factorExpr) = 0;
 };
 
 enum class Opcode {
@@ -23,28 +25,28 @@ enum class Opcode {
 };
 
 struct Expr {
-    virtual void Accept(Visitor* v) = 0;
+    virtual llvm::Value* Accept(Visitor* v) = 0;
 };
 
 struct BinaryExpr : Expr{
     Opcode opcode;
     std::shared_ptr<Expr> left;
     std::shared_ptr<Expr> right;
-    virtual void Accept(Visitor* v) override {
-        v->VisitBinaryExpr(this);
+    virtual llvm::Value* Accept(Visitor* v) override {
+        return v->VisitBinaryExpr(this);
     }
 };
 
 struct FactorExpr : Expr{
     int value;
-    virtual void Accept(Visitor* v) override {
-        v->VisitFactorExpr(this);
+    virtual llvm::Value* Accept(Visitor* v) override {
+        return v->VisitFactorExpr(this);
     }
 };
 
 struct Program {
     std::vector<std::shared_ptr<Expr>> exprVec;
-    virtual void Accept(Visitor* v) {
-        v->VisitrProgram(this);
+    virtual llvm::Value* Accept(Visitor* v) {
+        return v->VisitrProgram(this);
     }
 };
