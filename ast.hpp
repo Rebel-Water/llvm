@@ -23,8 +23,7 @@ enum class Opcode {
 };
 
 struct Expr {
-    virtual ~Expr() {}
-    virtual void Accept(Visitor* v) {}
+    virtual void Accept(Visitor* v) = 0;
 };
 
 struct BinaryExpr : Expr{
