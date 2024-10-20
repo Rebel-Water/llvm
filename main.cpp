@@ -20,9 +20,20 @@ int main(int argc, char* argv[]) {
     }
     auto memBuf = std::move(*buf);
     Lexer lex(memBuf->getBuffer());
+
+    // Token token; 
+    // while(true) {
+    //     lex.NextToken(token);
+    //     if(token.tokenType == TokenType::eof)
+    //         break;
+    //     token.Dump();
+    // }
+
+
     Parser parser(lex);
     auto program = parser.ParseProgram();
-    Codegen codegen(program);
+    // Codegen codegen(program);
+    PrintVisitor print(program);
     
     return 0;
 }

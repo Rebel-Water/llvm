@@ -1,5 +1,6 @@
 CMakeFiles/expr.dir/lexer.cpp.o: /home/ace/llvm-project/project/lexer.cpp \
  /usr/include/stdc-predef.h /home/ace/llvm-project/project/lexer.hpp \
+ /home/ace/llvm-project/project/type.hpp \
  /usr/lib/llvm-14/include/llvm/Support/StringSaver.h \
  /usr/lib/llvm-14/include/llvm/ADT/DenseSet.h \
  /usr/lib/llvm-14/include/llvm/ADT/DenseMap.h \

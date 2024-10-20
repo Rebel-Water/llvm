@@ -5,5 +5,8 @@ struct PrintVisitor : Visitor {
     PrintVisitor(std::shared_ptr<Program> program);
     virtual llvm::Value* VisitrProgram(Program* p);
     virtual llvm::Value* VisitBinaryExpr(BinaryExpr* binaryExpr); 
-    virtual llvm::Value* VisitFactorExpr(FactorExpr* factorExpr);
+    virtual llvm::Value* VisitNumberExpr(NumberExpr* numberExpr);
+    virtual llvm::Value* VisitAssignExpr(AssignExpr* assignExpr);
+    virtual llvm::Value* VisitVariableDecl(VariableDecl* variableDecl);
+    virtual llvm::Value* VisitVariableAccessExpr(VariableAccessExpr* variableAccessExpr);
 };

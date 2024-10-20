@@ -14,8 +14,12 @@ public:
     }
 private:
     virtual llvm::Value* VisitrProgram(Program* p) override;
-    virtual llvm::Value* VisitBinaryExpr(BinaryExpr* binaryExpr) override; 
-    virtual llvm::Value* VisitFactorExpr(FactorExpr* factorExpr) override;
+    virtual llvm::Value* VisitBinaryExpr(BinaryExpr* expr) override; 
+    virtual llvm::Value* VisitNumberExpr(NumberExpr* expr) override;
+    virtual llvm::Value* VisitAssignExpr(AssignExpr* expr) override;
+    virtual llvm::Value* VisitVariableDecl(VariableDecl* decl) override;
+    virtual llvm::Value* VisitVariableAccessExpr(VariableAccessExpr* expr) override;
+
 
     llvm::LLVMContext context;
     llvm::IRBuilder<> irBuilder{context};

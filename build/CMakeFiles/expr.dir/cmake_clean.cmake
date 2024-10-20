@@ -9,6 +9,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/expr.dir/parser.cpp.o.d"
   "CMakeFiles/expr.dir/printVisitor.cpp.o"
   "CMakeFiles/expr.dir/printVisitor.cpp.o.d"
+  "CMakeFiles/expr.dir/type.cpp.o"
+  "CMakeFiles/expr.dir/type.cpp.o.d"
   "bin/expr"
   "bin/expr.pdb"
 )

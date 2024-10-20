@@ -43,7 +43,22 @@ llvm::Value* Codegen::VisitBinaryExpr(BinaryExpr *binaryExpr)
     return nullptr;
 }
 
-llvm::Value* Codegen::VisitFactorExpr(FactorExpr *factorExpr)
+llvm::Value *Codegen::VisitAssignExpr(AssignExpr *expr)
 {
-    return irBuilder.getInt32(factorExpr->value);
+    return nullptr;
+}
+
+llvm::Value *Codegen::VisitVariableDecl(VariableDecl *decl)
+{
+    return nullptr;
+}
+
+llvm::Value *Codegen::VisitVariableAccessExpr(VariableAccessExpr *expr)
+{
+    return nullptr;
+}
+
+llvm::Value* Codegen::VisitNumberExpr(NumberExpr* expr)
+{
+    return irBuilder.getInt32(expr->value);
 }

@@ -5,9 +5,10 @@
 class Parser {
     Token current;
     Lexer lexer;
-    std::shared_ptr<Expr> ParseFactor(); 
-    std::shared_ptr<Expr> ParseExpr(); 
-    std::shared_ptr<Expr> ParseTerm(); 
+    std::vector<std::shared_ptr<AstNode>> PasreDecl();
+    std::shared_ptr<AstNode> ParseFactor(); 
+    std::shared_ptr<AstNode> ParseExpr(); 
+    std::shared_ptr<AstNode> ParseTerm(); 
     public:
     Parser(Lexer& lexer) : lexer(lexer) {
         Advance();

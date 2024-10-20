@@ -288,6 +288,30 @@ printVisitor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cpp.s
 .PHONY : printVisitor.cpp.s
 
+type.o: type.cpp.o
+.PHONY : type.o
+
+# target to build an object file
+type.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/type.cpp.o
+.PHONY : type.cpp.o
+
+type.i: type.cpp.i
+.PHONY : type.i
+
+# target to preprocess a source file
+type.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/type.cpp.i
+.PHONY : type.cpp.i
+
+type.s: type.cpp.s
+.PHONY : type.s
+
+# target to generate assembly for a file
+type.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/type.cpp.s
+.PHONY : type.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -315,6 +339,9 @@ help:
 	@echo "... printVisitor.o"
 	@echo "... printVisitor.i"
 	@echo "... printVisitor.s"
+	@echo "... type.o"
+	@echo "... type.i"
+	@echo "... type.s"
 .PHONY : help
 
 

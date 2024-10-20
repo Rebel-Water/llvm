@@ -1,9 +1,20 @@
 #include "lexer.hpp"
 #include <cctype>
+#include "type.hpp"
 
 static bool IsWhiteSpace(char ch)
 {
     return std::isspace(ch);
+}
+
+static bool IsDigit(char ch)
+{
+    return std::isdigit(ch);
+}
+
+static bool IsLetter(char ch)
+{
+    return std::isalpha(ch);
 }
 
 Lexer::Lexer(llvm::StringRef src) : LineHeadPtr(src.begin()), BufPtr(src.begin()), BufEnd(src.end())
@@ -33,7 +44,7 @@ void Lexer::NextToken(Token &token)
     token.col = BufPtr - LineHeadPtr + 1;
     
     auto start = BufPtr;
-    if (std::isdigit(*BufPtr))
+    if (IsDigit(*BufPtr))
     {
         int number = 0;
         int size = 0;
@@ -44,7 +55,18 @@ void Lexer::NextToken(Token &token)
             size++;
         } while (std::isdigit(*BufPtr));
         token.context = llvm::StringRef(start, size);
+        token.ty = CType::GetIntTy();
         token.value = number;
+    }
+    else if(IsLetter(*BufPtr)) {
+        while(IsLetter(*BufPtr) || IsDigit(*BufPtr)) {
+            BufPtr++;
+        }
+        token.tokenType = TokenType::identifier;
+        token.context = llvm::StringRef(start, BufPtr - start);
+        if(token.context == "int") {
+            token.tokenType = TokenType::kw_int;
+        }
     }
     else
     {
@@ -71,9 +93,34 @@ void Lexer::NextToken(Token &token)
             break;
         case ')':
             token.tokenType = TokenType::r_parent;
+            break;
+        case ',':
+            token.tokenType = TokenType::comma;
+            break;
+        case '=':
+            token.tokenType = TokenType::equal;
+            break;
         default:
             token.tokenType = TokenType::unknow;
             break;
         }
     }
+}
+
+llvm::raw_ostream& operator<<(llvm::raw_ostream& os, const TokenType& tokenType) {
+    llvm::StringRef name = [&]()
+    {
+        switch (tokenType)
+        {
+#define X(name)        \
+    case TokenType::name: \
+        return #name;
+        TOKENNAME
+#undef X
+    default: // cann't throw, we disable rtti 
+        return "No Such tokenType!";
+        }
+    }();
+    os << name;
+    return os;
 }
