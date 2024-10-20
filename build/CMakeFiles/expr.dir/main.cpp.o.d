@@ -308,6 +308,8 @@ CMakeFiles/expr.dir/main.cpp.o: /home/ace/llvm-project/project/main.cpp \
  /home/ace/llvm-project/project/printVisitor.hpp \
  /home/ace/llvm-project/project/ast.hpp \
  /home/ace/llvm-project/project/parser.hpp \
+ /home/ace/llvm-project/project/sema.hpp \
+ /home/ace/llvm-project/project/scope.hpp \
  /home/ace/llvm-project/project/codegen.hpp \
  /usr/lib/llvm-14/include/llvm/IR/IRBuilder.h \
  /usr/lib/llvm-14/include/llvm/IR/ConstantFolder.h \

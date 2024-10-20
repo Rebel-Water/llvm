@@ -2,14 +2,14 @@
 
 PrintVisitor::PrintVisitor(std::shared_ptr<Program> program)
 {
-    VisitrProgram(program.get());
+    VisitProgram(program.get());
 }
 
-llvm::Value *PrintVisitor::VisitrProgram(Program *p)
+llvm::Value *PrintVisitor::VisitProgram(Program *p)
 {
-    for (auto &expr : p->exprVec)
+    for (auto &node : p->astNodes)
     {
-        expr->Accept(this);
+        node->Accept(this);
         llvm::outs() << "\n";
     }
     return nullptr;

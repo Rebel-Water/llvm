@@ -9,24 +9,17 @@ std::vector<std::shared_ptr<AstNode>> Parser::PasreDecl()
 
     while (current.tokenType != TokenType::semi)
     {
-
-        auto variableDecl = std::make_shared<VariableDecl>();
-        variableDecl->name = current.context;
-        variableDecl->ty = baseTy;
+        auto variableName = current.context;
+        auto variableDecl = sema.SemaVarDeclNode(variableName, baseTy);
         astArr.push_back(variableDecl);
         Consume(TokenType::identifier);
 
         if (current.tokenType == TokenType::equal)
         {
             Advance();
+            auto left = sema.SemaVarAccessNode(variableName);
             auto right = ParseExpr();
-            auto assignExpr = std::make_shared<AssignExpr>();
-            auto accessExpr = std::make_shared<VariableAccessExpr>();
-
-            accessExpr->name = variableDecl->name;
-            assignExpr->left = accessExpr;
-
-            assignExpr->right = right;
+            auto assignExpr = sema.SemaAssignExprNode(left, right);
 
             astArr.push_back(assignExpr);
         }
@@ -49,16 +42,13 @@ std::shared_ptr<AstNode> Parser::ParseFactor()
     }
     else if (current.tokenType == TokenType::identifier)
     {
-        auto expr = std::make_shared<VariableAccessExpr>();
-        expr->name = current.context;
+        auto expr = sema.SemaVarAccessNode(current.context);
         Advance();
         return expr;
     }
     else
     {
-        auto factor = std::make_shared<NumberExpr>();
-        factor->value = current.value;
-        factor->ty = current.ty;
+        auto factor = sema.SemaNumberNode(current.value, current.ty);
         Advance();
         return factor;
     }
@@ -75,11 +65,9 @@ std::shared_ptr<AstNode> Parser::ParseExpr()
         else
             op = Opcode::sub;
         Advance();
-        auto binaryAstNode = std::make_shared<BinaryExpr>();
-        binaryAstNode->opcode = op;
-        binaryAstNode->left = left;
-        binaryAstNode->right = ParseTerm();
-        left = binaryAstNode;
+        auto right = ParseTerm();;
+        auto binaryExpr = sema.SemaBinaryExprNode(left, right, op);
+        left = binaryExpr;
     }
     return left;
 }
@@ -95,18 +83,16 @@ std::shared_ptr<AstNode> Parser::ParseTerm()
         else
             op = Opcode::div;
         Advance();
-        auto binaryAstNode = std::make_shared<BinaryExpr>();
-        binaryAstNode->opcode = op;
-        binaryAstNode->left = left;
-        binaryAstNode->right = ParseFactor();
-        left = binaryAstNode;
+        auto right = ParseFactor();
+        auto binaryExpr = sema.SemaBinaryExprNode(left, right, op);
+        left = binaryExpr;
     }
     return left;
 }
 
 std::shared_ptr<Program> Parser::ParseProgram()
 {
-    std::vector<std::shared_ptr<AstNode>> exprVec;
+    std::vector<std::shared_ptr<AstNode>> astVec;
     while (current.tokenType != TokenType::eof)
     {
         if (current.tokenType == TokenType::semi)
@@ -118,16 +104,16 @@ std::shared_ptr<Program> Parser::ParseProgram()
         {
             const auto &exprs = PasreDecl();
             for (auto &expr : exprs)
-                exprVec.push_back(expr);
+                astVec.push_back(expr);
         }
         else
         {
             auto expr = ParseExpr();
-            exprVec.push_back(expr);
+            astVec.push_back(expr);
         }
     }
     auto program = std::make_shared<Program>();
-    program->exprVec = std::move(exprVec);
+    program->astNodes = std::move(astVec);
     return program;
 }
 

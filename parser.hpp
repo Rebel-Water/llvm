@@ -2,15 +2,18 @@
 #include <memory>
 #include "lexer.hpp"
 #include "ast.hpp"
+#include "sema.hpp"
 class Parser {
     Token current;
-    Lexer lexer;
+    Lexer& lexer;
+    Sema& sema;
+
     std::vector<std::shared_ptr<AstNode>> PasreDecl();
     std::shared_ptr<AstNode> ParseFactor(); 
     std::shared_ptr<AstNode> ParseExpr(); 
     std::shared_ptr<AstNode> ParseTerm(); 
     public:
-    Parser(Lexer& lexer) : lexer(lexer) {
+    Parser(Lexer& lexer, Sema& sema) : lexer(lexer) , sema(sema) {
         Advance();
     }
     std::shared_ptr<Program> ParseProgram();

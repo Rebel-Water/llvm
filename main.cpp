@@ -6,6 +6,7 @@
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/ErrorOr.h"
 #include <iostream>
+#include "sema.hpp"
 
 int main(int argc, char* argv[]) {
     if(argc < 2) {
@@ -28,12 +29,12 @@ int main(int argc, char* argv[]) {
     //         break;
     //     token.Dump();
     // }
+    Sema sema;
 
-
-    Parser parser(lex);
+    Parser parser(lex, sema);
     auto program = parser.ParseProgram();
-    // Codegen codegen(program);
-    PrintVisitor print(program);
+    Codegen codegen(program);
+    //PrintVisitor print(program);
     
     return 0;
 }

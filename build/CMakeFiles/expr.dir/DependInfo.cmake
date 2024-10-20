@@ -13,6 +13,8 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/ace/llvm-project/project/main.cpp" "CMakeFiles/expr.dir/main.cpp.o" "gcc" "CMakeFiles/expr.dir/main.cpp.o.d"
   "/home/ace/llvm-project/project/parser.cpp" "CMakeFiles/expr.dir/parser.cpp.o" "gcc" "CMakeFiles/expr.dir/parser.cpp.o.d"
   "/home/ace/llvm-project/project/printVisitor.cpp" "CMakeFiles/expr.dir/printVisitor.cpp.o" "gcc" "CMakeFiles/expr.dir/printVisitor.cpp.o.d"
+  "/home/ace/llvm-project/project/scope.cpp" "CMakeFiles/expr.dir/scope.cpp.o" "gcc" "CMakeFiles/expr.dir/scope.cpp.o.d"
+  "/home/ace/llvm-project/project/sema.cpp" "CMakeFiles/expr.dir/sema.cpp.o" "gcc" "CMakeFiles/expr.dir/sema.cpp.o.d"
   "/home/ace/llvm-project/project/type.cpp" "CMakeFiles/expr.dir/type.cpp.o" "gcc" "CMakeFiles/expr.dir/type.cpp.o.d"
   )
 

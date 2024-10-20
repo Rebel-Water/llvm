@@ -306,6 +306,8 @@ CMakeFiles/expr.dir/codegen.cpp.o: \
  /usr/lib/llvm-14/include/llvm/IR/GlobalVariable.h \
  /usr/lib/llvm-14/include/llvm/IR/ProfileSummary.h \
  /usr/lib/llvm-14/include/llvm/Support/CodeGen.h \
+ /home/ace/llvm-project/project/sema.hpp \
+ /home/ace/llvm-project/project/scope.hpp \
  /usr/lib/llvm-14/include/llvm/IR/IRBuilder.h \
  /usr/lib/llvm-14/include/llvm/IR/ConstantFolder.h \
  /usr/lib/llvm-14/include/llvm/IR/Constants.h \

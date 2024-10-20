@@ -288,6 +288,54 @@ printVisitor.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cpp.s
 .PHONY : printVisitor.cpp.s
 
+scope.o: scope.cpp.o
+.PHONY : scope.o
+
+# target to build an object file
+scope.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/scope.cpp.o
+.PHONY : scope.cpp.o
+
+scope.i: scope.cpp.i
+.PHONY : scope.i
+
+# target to preprocess a source file
+scope.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/scope.cpp.i
+.PHONY : scope.cpp.i
+
+scope.s: scope.cpp.s
+.PHONY : scope.s
+
+# target to generate assembly for a file
+scope.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/scope.cpp.s
+.PHONY : scope.cpp.s
+
+sema.o: sema.cpp.o
+.PHONY : sema.o
+
+# target to build an object file
+sema.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/sema.cpp.o
+.PHONY : sema.cpp.o
+
+sema.i: sema.cpp.i
+.PHONY : sema.i
+
+# target to preprocess a source file
+sema.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/sema.cpp.i
+.PHONY : sema.cpp.i
+
+sema.s: sema.cpp.s
+.PHONY : sema.s
+
+# target to generate assembly for a file
+sema.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/sema.cpp.s
+.PHONY : sema.cpp.s
+
 type.o: type.cpp.o
 .PHONY : type.o
 
@@ -339,6 +387,12 @@ help:
 	@echo "... printVisitor.o"
 	@echo "... printVisitor.i"
 	@echo "... printVisitor.s"
+	@echo "... scope.o"
+	@echo "... scope.i"
+	@echo "... scope.s"
+	@echo "... sema.o"
+	@echo "... sema.i"
+	@echo "... sema.s"
 	@echo "... type.o"
 	@echo "... type.i"
 	@echo "... type.s"

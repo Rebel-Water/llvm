@@ -15,7 +15,7 @@ struct VariableAccessExpr;
 class Visitor {
     public:
     virtual ~Visitor() = default;
-    virtual llvm::Value* VisitrProgram(Program* p) = 0;
+    virtual llvm::Value* VisitProgram(Program* p) = 0;
     virtual llvm::Value* VisitAstNode(AstNode* node) { return nullptr; }
     virtual llvm::Value* VisitBinaryExpr(BinaryExpr* expr) = 0; 
     virtual llvm::Value* VisitNumberExpr(NumberExpr* expr) = 0;
@@ -104,8 +104,8 @@ struct AssignExpr : AstNode {
 };
 
 struct Program {
-    std::vector<std::shared_ptr<AstNode>> exprVec;
+    std::vector<std::shared_ptr<AstNode>> astNodes;
     virtual llvm::Value* Accept(Visitor* v) {
-        return v->VisitrProgram(this);
+        return v->VisitProgram(this);
     }
 };
