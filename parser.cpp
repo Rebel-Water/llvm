@@ -1,7 +1,7 @@
 #include "parser.hpp"
 #include <cassert>
 
-std::vector<std::shared_ptr<AstNode>> Parser::PasreDecl()
+std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
 {
     Consume(TokenType::kw_int);
     CType *baseTy = CType::GetIntTy();
@@ -14,6 +14,7 @@ std::vector<std::shared_ptr<AstNode>> Parser::PasreDecl()
         astArr.push_back(variableDecl);
         Consume(TokenType::identifier);
 
+        // int a = 1, b = 2; => int a; a = 1; int b; b = 2;
         if (current.tokenType == TokenType::equal)
         {
             Advance();
@@ -56,6 +57,18 @@ std::shared_ptr<AstNode> Parser::ParseFactor()
 
 std::shared_ptr<AstNode> Parser::ParseExpr()
 {
+    bool isAssignExpr = false;
+    lexer.SaveState();
+    if(current.tokenType == TokenType::identifier) {
+        Token next;
+        lexer.NextToken(next);
+        if(next.tokenType == TokenType::equal)
+            isAssignExpr = true;
+    }
+    lexer.RestoreState();
+    if(isAssignExpr)
+        return ParseAssignExpr();
+
     auto left = ParseTerm();
     while (current.tokenType == TokenType::minus || current.tokenType == TokenType::plus)
     {
@@ -90,6 +103,16 @@ std::shared_ptr<AstNode> Parser::ParseTerm()
     return left;
 }
 
+std::shared_ptr<AstNode> Parser::ParseAssignExpr()
+{
+    Expect(TokenType::identifier);
+    auto text = current.context;
+    Advance();
+    auto expr = sema.SemaVarAccessNode(text);
+    Consume(TokenType::equal);
+    return sema.SemaAssignExprNode(expr, ParseExpr());
+}
+
 std::shared_ptr<Program> Parser::ParseProgram()
 {
     std::vector<std::shared_ptr<AstNode>> astVec;
@@ -102,19 +125,25 @@ std::shared_ptr<Program> Parser::ParseProgram()
         }
         if (current.tokenType == TokenType::kw_int)
         {
-            const auto &exprs = PasreDecl();
-            for (auto &expr : exprs)
-                astVec.push_back(expr);
+            const auto &decls = PasreDeclStmt();
+            for (auto &decl : decls)
+                astVec.push_back(decl);
         }
         else
         {
-            auto expr = ParseExpr();
+            auto expr = ParseExprStmt();
             astVec.push_back(expr);
         }
     }
     auto program = std::make_shared<Program>();
     program->astNodes = std::move(astVec);
     return program;
+}
+
+std::shared_ptr<AstNode> Parser::ParseExprStmt() {
+    auto expr = ParseExpr();
+    Consume(TokenType::semi);
+    return expr;
 }
 
 bool Parser::Expect(TokenType tokenType)

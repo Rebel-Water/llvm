@@ -8,10 +8,12 @@ class Parser {
     Lexer& lexer;
     Sema& sema;
 
-    std::vector<std::shared_ptr<AstNode>> PasreDecl();
+    std::vector<std::shared_ptr<AstNode>> PasreDeclStmt();
+    std::shared_ptr<AstNode> ParseExprStmt();
     std::shared_ptr<AstNode> ParseFactor(); 
     std::shared_ptr<AstNode> ParseExpr(); 
     std::shared_ptr<AstNode> ParseTerm(); 
+    std::shared_ptr<AstNode> ParseAssignExpr(); 
     public:
     Parser(Lexer& lexer, Sema& sema) : lexer(lexer) , sema(sema) {
         Advance();

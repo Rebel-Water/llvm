@@ -47,9 +47,13 @@ llvm::Value *Codegen::VisitBinaryExpr(BinaryExpr *binaryExpr)
 llvm::Value *Codegen::VisitAssignExpr(AssignExpr *expr)
 {
     VariableAccessExpr* varAccessExpr = (VariableAccessExpr*)(expr->left.get());
-    llvm::Value* leftValAddr = varAddrMap[varAccessExpr->name];
-    llvm::Value* rightValue = expr->right->Accept(this);
-    return irBuilder.CreateStore(rightValue, leftValAddr);
+    auto pair = varAddrTypeMap[varAccessExpr->name];
+    auto addr = pair.first;
+    auto ty = pair.second;
+
+    auto rightValue = expr->right->Accept(this);
+    irBuilder.CreateStore(rightValue, addr);
+    return irBuilder.CreateLoad(ty, addr, varAccessExpr->name);
 }
 
 llvm::Value *Codegen::VisitVariableDecl(VariableDecl *decl)
@@ -58,16 +62,15 @@ llvm::Value *Codegen::VisitVariableDecl(VariableDecl *decl)
     if (decl->ty == CType::GetIntTy())
         ty = irBuilder.getInt32Ty();
     llvm::Value *value = irBuilder.CreateAlloca(ty, nullptr, decl->name);
-    varAddrMap.insert({decl->name, value});
+    varAddrTypeMap.insert({decl->name, std::make_pair(value, ty)});
     return value;
 }
 
 llvm::Value *Codegen::VisitVariableAccessExpr(VariableAccessExpr *expr)
 {
-    llvm::Value *varAddr = varAddrMap[expr->name];
-    llvm::Type *ty = nullptr;
-    if (expr->ty == CType::GetIntTy())
-        ty = irBuilder.getInt32Ty();
+    auto pair = varAddrTypeMap[expr->name];
+    llvm::Value *varAddr = pair.first;
+    llvm::Type *ty = pair.second;
     return irBuilder.CreateLoad(ty, varAddr, expr->name);
 }
 

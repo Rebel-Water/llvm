@@ -5,7 +5,7 @@
 #include "llvm/IR/LLVMContext.h"
 #include "llvm/IR/Module.h"
 #include "llvm/IR/IRBuilder.h"
-
+#include <utility>
 class Codegen : Visitor {
 public:
     Codegen(std::shared_ptr<Program> p) {
@@ -24,5 +24,5 @@ private:
     llvm::IRBuilder<> irBuilder{context};
     std::shared_ptr<llvm::Module> module;
 
-    llvm::StringMap<llvm::Value*> varAddrMap;
+    llvm::StringMap<std::pair<llvm::Value*, llvm::Type*>> varAddrTypeMap;
 };

@@ -42,7 +42,7 @@ void Lexer::NextToken(Token &token)
     }
 
     token.col = BufPtr - LineHeadPtr + 1;
-    
+
     auto start = BufPtr;
     if (IsDigit(*BufPtr))
     {
@@ -58,13 +58,16 @@ void Lexer::NextToken(Token &token)
         token.ty = CType::GetIntTy();
         token.value = number;
     }
-    else if(IsLetter(*BufPtr)) {
-        while(IsLetter(*BufPtr) || IsDigit(*BufPtr)) {
+    else if (IsLetter(*BufPtr))
+    {
+        while (IsLetter(*BufPtr) || IsDigit(*BufPtr))
+        {
             BufPtr++;
         }
         token.tokenType = TokenType::identifier;
         token.context = llvm::StringRef(start, BufPtr - start);
-        if(token.context == "int") {
+        if (token.context == "int")
+        {
             token.tokenType = TokenType::kw_int;
         }
     }
@@ -107,18 +110,35 @@ void Lexer::NextToken(Token &token)
     }
 }
 
-llvm::raw_ostream& operator<<(llvm::raw_ostream& os, const TokenType& tokenType) {
+void Lexer::SaveState()
+{
+    state.row = row;
+    state.BufEnd = BufEnd;
+    state.BufPtr = BufPtr;
+    state.LineHeadPtr = LineHeadPtr;
+}
+
+void Lexer::RestoreState()
+{
+    row = state.row;
+    BufEnd = state.BufEnd;
+    BufPtr = state.BufPtr;
+    LineHeadPtr = state.LineHeadPtr;
+}
+
+llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const TokenType &tokenType)
+{
     llvm::StringRef name = [&]()
     {
         switch (tokenType)
         {
-#define X(name)        \
+#define X(name)           \
     case TokenType::name: \
         return #name;
-        TOKENNAME
+            TOKENNAME
 #undef X
-    default: // cann't throw, we disable rtti 
-        return "No Such tokenType!";
+        default: // cann't throw, we disable rtti
+            return "No Such tokenType!";
         }
     }();
     os << name;
