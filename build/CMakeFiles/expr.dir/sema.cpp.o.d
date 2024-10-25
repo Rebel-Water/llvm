@@ -241,5 +241,80 @@ CMakeFiles/expr.dir/sema.cpp.o: /home/ace/llvm-project/project/sema.cpp \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
  /usr/lib/llvm-14/include/llvm/IR/Value.def \
+ /home/ace/llvm-project/project/lexer.hpp \
+ /usr/lib/llvm-14/include/llvm/Support/StringSaver.h \
+ /usr/lib/llvm-14/include/llvm/ADT/DenseSet.h \
+ /usr/lib/llvm-14/include/llvm/ADT/DenseMap.h \
+ /usr/lib/llvm-14/include/llvm/ADT/EpochTracker.h \
+ /usr/lib/llvm-14/include/llvm/Support/AlignOf.h \
+ /usr/lib/llvm-14/include/llvm/Support/ReverseIteration.h \
+ /usr/lib/llvm-14/include/llvm/ADT/Twine.h \
+ /usr/lib/llvm-14/include/llvm/ADT/SmallVector.h \
+ /usr/lib/llvm-14/include/llvm/Support/Allocator.h \
+ /usr/lib/llvm-14/include/llvm/IR/Module.h \
+ /usr/lib/llvm-14/include/llvm/IR/Attributes.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ArrayRef.h \
+ /usr/lib/llvm-14/include/llvm/ADT/SmallString.h \
+ /usr/include/c++/11/bitset /usr/include/c++/11/set \
+ /usr/include/c++/11/bits/stl_tree.h /usr/include/c++/11/bits/stl_set.h \
+ /usr/include/c++/11/bits/stl_multiset.h \
+ /usr/lib/llvm-14/include/llvm/IR/Attributes.inc \
+ /usr/lib/llvm-14/include/llvm/IR/Comdat.h \
+ /usr/lib/llvm-14/include/llvm/ADT/SmallPtrSet.h \
+ /usr/lib/llvm-14/include/llvm/IR/DataLayout.h \
+ /usr/lib/llvm-14/include/llvm/ADT/APInt.h \
+ /usr/lib/llvm-14/include/llvm/IR/DerivedTypes.h \
+ /usr/lib/llvm-14/include/llvm/IR/Type.h \
+ /usr/lib/llvm-14/include/llvm/Support/TypeSize.h \
  /usr/lib/llvm-14/include/llvm/Support/raw_ostream.h \
- /usr/lib/llvm-14/include/llvm/ADT/SmallVector.h
+ /usr/lib/llvm-14/include/llvm/Support/TrailingObjects.h \
+ /usr/lib/llvm-14/include/llvm/IR/Function.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist_node.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist_node_base.h \
+ /usr/lib/llvm-14/include/llvm/ADT/PointerIntPair.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist_node_options.h \
+ /usr/lib/llvm-14/include/llvm/IR/Argument.h \
+ /usr/lib/llvm-14/include/llvm/IR/BasicBlock.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist.h \
+ /usr/lib/llvm-14/include/llvm/ADT/simple_ilist.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist_base.h \
+ /usr/lib/llvm-14/include/llvm/ADT/ilist_iterator.h \
+ /usr/lib/llvm-14/include/llvm/IR/Instruction.h \
+ /usr/lib/llvm-14/include/llvm/ADT/Bitfields.h \
+ /usr/lib/llvm-14/include/llvm/IR/DebugLoc.h \
+ /usr/lib/llvm-14/include/llvm/IR/TrackingMDRef.h \
+ /usr/lib/llvm-14/include/llvm/IR/Metadata.h \
+ /usr/lib/llvm-14/include/llvm/ADT/PointerUnion.h \
+ /usr/lib/llvm-14/include/llvm/IR/Constant.h \
+ /usr/lib/llvm-14/include/llvm/IR/User.h \
+ /usr/lib/llvm-14/include/llvm/IR/LLVMContext.h \
+ /usr/lib/llvm-14/include/llvm/IR/DiagnosticHandler.h \
+ /usr/lib/llvm-14/include/llvm/IR/FixedMetadataKinds.def \
+ /usr/lib/llvm-14/include/llvm/IR/Metadata.def \
+ /usr/lib/llvm-14/include/llvm/IR/SymbolTableListTraits.h \
+ /usr/lib/llvm-14/include/llvm/Support/AtomicOrdering.h \
+ /usr/lib/llvm-14/include/llvm/IR/Instruction.def \
+ /usr/lib/llvm-14/include/llvm/IR/CallingConv.h \
+ /usr/lib/llvm-14/include/llvm/IR/GlobalObject.h \
+ /usr/lib/llvm-14/include/llvm/IR/GlobalValue.h \
+ /usr/lib/llvm-14/include/llvm/Support/MD5.h \
+ /usr/lib/llvm-14/include/llvm/Support/Endian.h \
+ /usr/lib/llvm-14/include/llvm/IR/OperandTraits.h \
+ /usr/lib/llvm-14/include/llvm/IR/GlobalAlias.h \
+ /usr/lib/llvm-14/include/llvm/IR/GlobalIFunc.h \
+ /usr/lib/llvm-14/include/llvm/IR/GlobalVariable.h \
+ /usr/lib/llvm-14/include/llvm/IR/ProfileSummary.h \
+ /usr/lib/llvm-14/include/llvm/Support/CodeGen.h \
+ /home/ace/llvm-project/project/diag_engine.hpp \
+ /usr/lib/llvm-14/include/llvm/Support/SourceMgr.h \
+ /usr/lib/llvm-14/include/llvm/Support/MemoryBuffer.h \
+ /usr/lib/llvm-14/include/llvm/Support/ErrorOr.h \
+ /usr/lib/llvm-14/include/llvm/Support/MemoryBufferRef.h \
+ /usr/lib/llvm-14/include/llvm/Support/SMLoc.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatVariadic.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatCommon.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatVariadicDetails.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatProviders.h \
+ /usr/lib/llvm-14/include/llvm/ADT/StringSwitch.h \
+ /usr/lib/llvm-14/include/llvm/Support/NativeFormatting.h \
+ /home/ace/llvm-project/project/diag.inc

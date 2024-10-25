@@ -192,6 +192,30 @@ codegen.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/codegen.cpp.s
 .PHONY : codegen.cpp.s
 
+diag_engine.o: diag_engine.cpp.o
+.PHONY : diag_engine.o
+
+# target to build an object file
+diag_engine.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/diag_engine.cpp.o
+.PHONY : diag_engine.cpp.o
+
+diag_engine.i: diag_engine.cpp.i
+.PHONY : diag_engine.i
+
+# target to preprocess a source file
+diag_engine.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/diag_engine.cpp.i
+.PHONY : diag_engine.cpp.i
+
+diag_engine.s: diag_engine.cpp.s
+.PHONY : diag_engine.s
+
+# target to generate assembly for a file
+diag_engine.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/diag_engine.cpp.s
+.PHONY : diag_engine.cpp.s
+
 lexer.o: lexer.cpp.o
 .PHONY : lexer.o
 
@@ -375,6 +399,9 @@ help:
 	@echo "... codegen.o"
 	@echo "... codegen.i"
 	@echo "... codegen.s"
+	@echo "... diag_engine.o"
+	@echo "... diag_engine.i"
+	@echo "... diag_engine.s"
 	@echo "... lexer.o"
 	@echo "... lexer.i"
 	@echo "... lexer.s"

@@ -1,6 +1,7 @@
 #include "lexer.hpp"
 #include <cctype>
 #include "type.hpp"
+#include "diag_engine.hpp"
 
 static bool IsWhiteSpace(char ch)
 {
@@ -17,13 +18,18 @@ static bool IsLetter(char ch)
     return std::isalpha(ch);
 }
 
-Lexer::Lexer(llvm::StringRef src) : LineHeadPtr(src.begin()), BufPtr(src.begin()), BufEnd(src.end())
+Lexer::Lexer(llvm::SourceMgr &mgr, DiagEngine &diagEngine) : mgr(mgr), diagEngine(diagEngine)
 {
+    unsigned id = mgr.getMainFileID();
+    llvm::StringRef buf = mgr.getMemoryBuffer(id)->getBuffer();
+    BufPtr = buf.begin();
+    LineHeadPtr = BufPtr;
+    BufEnd = buf.end();
+    row = 1;
 }
 
 void Lexer::NextToken(Token &token)
 {
-    token.row = row;
 
     while (IsWhiteSpace(*BufPtr))
     {
@@ -41,20 +47,20 @@ void Lexer::NextToken(Token &token)
         return;
     }
 
+    token.row = row;
     token.col = BufPtr - LineHeadPtr + 1;
 
-    auto start = BufPtr;
+    const char *startPtr = BufPtr;
     if (IsDigit(*BufPtr))
     {
         int number = 0;
-        int size = 0;
-        token.tokenType = TokenType::number;
         do
         {
             number += number * 10 + *BufPtr++ - '0';
-            size++;
         } while (std::isdigit(*BufPtr));
-        token.context = llvm::StringRef(start, size);
+        token.tokenType = TokenType::number;
+        token.ptr = startPtr;
+        token.len = BufPtr - startPtr;
         token.ty = CType::GetIntTy();
         token.value = number;
     }
@@ -65,16 +71,17 @@ void Lexer::NextToken(Token &token)
             BufPtr++;
         }
         token.tokenType = TokenType::identifier;
-        token.context = llvm::StringRef(start, BufPtr - start);
-        if (token.context == "int")
-        {
+        token.ptr = startPtr;
+        token.len = BufPtr - startPtr;
+        auto text = llvm::StringRef(token.ptr, token.len);
+        if (text == "int")
             token.tokenType = TokenType::kw_int;
-        }
     }
     else
     {
-        token.context = llvm::StringRef(start, 1);
-        switch (*BufPtr++)
+        token.ptr = startPtr;
+        token.len = 1;
+        switch (*BufPtr)
         {
         case '+':
             token.tokenType = TokenType::plus;
@@ -104,9 +111,10 @@ void Lexer::NextToken(Token &token)
             token.tokenType = TokenType::equal;
             break;
         default:
-            token.tokenType = TokenType::unknow;
+            diagEngine.Report(llvm::SMLoc::getFromPointer(BufPtr), diag::err_unknown_char, *BufPtr);
             break;
         }
+        BufPtr++;
     }
 }
 
@@ -143,4 +151,37 @@ llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const TokenType &tokenType)
     }();
     os << name;
     return os;
+}
+
+llvm::StringRef Token::GetSpellingText(TokenType tokenType)
+{
+    switch (tokenType)
+    {
+    case TokenType::kw_int:
+        return "int";
+    case TokenType::minus:
+        return "-";
+    case TokenType::plus:
+        return "+";
+    case TokenType::star:
+        return "*";
+    case TokenType::slash:
+        return "/";
+    case TokenType::l_parent:
+        return "(";
+    case TokenType::r_parent:
+        return ")";
+    case TokenType::semi:
+        return ";";
+    case TokenType::equal:
+        return "=";
+    case TokenType::comma:
+        return ",";
+    case TokenType::identifier:
+        return "identifier";
+    case TokenType::number:
+        return "number";
+    default:
+        llvm::llvm_unreachable_internal();
+    }
 }

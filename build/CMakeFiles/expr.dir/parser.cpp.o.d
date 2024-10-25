@@ -305,6 +305,23 @@ CMakeFiles/expr.dir/parser.cpp.o: \
  /usr/lib/llvm-14/include/llvm/IR/GlobalVariable.h \
  /usr/lib/llvm-14/include/llvm/IR/ProfileSummary.h \
  /usr/lib/llvm-14/include/llvm/Support/CodeGen.h \
+ /home/ace/llvm-project/project/diag_engine.hpp \
+ /usr/lib/llvm-14/include/llvm/Support/SourceMgr.h \
+ /usr/lib/llvm-14/include/llvm/Support/MemoryBuffer.h \
+ /usr/lib/llvm-14/include/llvm/Support/ErrorOr.h \
+ /usr/lib/llvm-14/include/llvm/Support/MemoryBufferRef.h \
+ /usr/lib/llvm-14/include/llvm/Support/SMLoc.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatVariadic.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatCommon.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatVariadicDetails.h \
+ /usr/lib/llvm-14/include/llvm/Support/FormatProviders.h \
+ /usr/lib/llvm-14/include/llvm/ADT/StringSwitch.h \
+ /usr/lib/llvm-14/include/llvm/Support/NativeFormatting.h \
+ /home/ace/llvm-project/project/diag.inc \
  /home/ace/llvm-project/project/ast.hpp \
  /home/ace/llvm-project/project/sema.hpp \
- /home/ace/llvm-project/project/scope.hpp
+ /home/ace/llvm-project/project/scope.hpp /usr/include/c++/11/mutex \
+ /usr/include/c++/11/chrono /usr/include/c++/11/ratio \
+ /usr/include/c++/11/ctime /usr/include/c++/11/bits/parse_numbers.h \
+ /usr/include/c++/11/bits/std_mutex.h \
+ /usr/include/c++/11/bits/unique_lock.h

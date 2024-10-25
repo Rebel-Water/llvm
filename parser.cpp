@@ -1,5 +1,6 @@
 #include "parser.hpp"
 #include <cassert>
+#include <mutex>
 
 std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
 {
@@ -9,8 +10,8 @@ std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
 
     while (current.tokenType != TokenType::semi)
     {
-        auto variableName = current.context;
-        auto variableDecl = sema.SemaVarDeclNode(variableName, baseTy);
+        Token temp = current;
+        auto variableDecl = sema.SemaVarDeclNode(temp, baseTy);
         astArr.push_back(variableDecl);
         Consume(TokenType::identifier);
 
@@ -18,16 +19,16 @@ std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
         if (current.tokenType == TokenType::equal)
         {
             Advance();
-            auto left = sema.SemaVarAccessNode(variableName);
+            auto left = sema.SemaVarAccessNode(temp);
             auto right = ParseExpr();
-            auto assignExpr = sema.SemaAssignExprNode(left, right);
+            auto assignExpr = sema.SemaAssignExprNode(left, right, temp);
 
             astArr.push_back(assignExpr);
         }
-        if (Expect(TokenType::comma))
+        if(Peek(TokenType::comma))
             Advance();
     }
-    Consume(TokenType::semi);
+    Expect(TokenType::semi);
     return astArr;
 }
 
@@ -43,13 +44,14 @@ std::shared_ptr<AstNode> Parser::ParseFactor()
     }
     else if (current.tokenType == TokenType::identifier)
     {
-        auto expr = sema.SemaVarAccessNode(current.context);
+        auto expr = sema.SemaVarAccessNode(current);
         Advance();
         return expr;
     }
     else
     {
-        auto factor = sema.SemaNumberNode(current.value, current.ty);
+        Expect(TokenType::number);
+        auto factor = sema.SemaNumberNode(current, current.ty);
         Advance();
         return factor;
     }
@@ -59,14 +61,15 @@ std::shared_ptr<AstNode> Parser::ParseExpr()
 {
     bool isAssignExpr = false;
     lexer.SaveState();
-    if(current.tokenType == TokenType::identifier) {
+    if (current.tokenType == TokenType::identifier)
+    {
         Token next;
         lexer.NextToken(next);
-        if(next.tokenType == TokenType::equal)
+        if (next.tokenType == TokenType::equal)
             isAssignExpr = true;
     }
     lexer.RestoreState();
-    if(isAssignExpr)
+    if (isAssignExpr)
         return ParseAssignExpr();
 
     auto left = ParseTerm();
@@ -78,7 +81,8 @@ std::shared_ptr<AstNode> Parser::ParseExpr()
         else
             op = Opcode::sub;
         Advance();
-        auto right = ParseTerm();;
+        auto right = ParseTerm();
+        ;
         auto binaryExpr = sema.SemaBinaryExprNode(left, right, op);
         left = binaryExpr;
     }
@@ -106,11 +110,12 @@ std::shared_ptr<AstNode> Parser::ParseTerm()
 std::shared_ptr<AstNode> Parser::ParseAssignExpr()
 {
     Expect(TokenType::identifier);
-    auto text = current.context;
+    auto temp = current;
     Advance();
-    auto expr = sema.SemaVarAccessNode(text);
+    auto expr = sema.SemaVarAccessNode(temp);
+    temp = current;
     Consume(TokenType::equal);
-    return sema.SemaAssignExprNode(expr, ParseExpr());
+    return sema.SemaAssignExprNode(expr, ParseExpr(), temp);
 }
 
 std::shared_ptr<Program> Parser::ParseProgram()
@@ -123,7 +128,7 @@ std::shared_ptr<Program> Parser::ParseProgram()
             Advance();
             continue;
         }
-        if (current.tokenType == TokenType::kw_int)
+        else if (current.tokenType == TokenType::kw_int)
         {
             const auto &decls = PasreDeclStmt();
             for (auto &decl : decls)
@@ -140,7 +145,8 @@ std::shared_ptr<Program> Parser::ParseProgram()
     return program;
 }
 
-std::shared_ptr<AstNode> Parser::ParseExprStmt() {
+std::shared_ptr<AstNode> Parser::ParseExprStmt()
+{
     auto expr = ParseExpr();
     Consume(TokenType::semi);
     return expr;
@@ -148,7 +154,10 @@ std::shared_ptr<AstNode> Parser::ParseExprStmt() {
 
 bool Parser::Expect(TokenType tokenType)
 {
-    return current.tokenType == tokenType;
+    if (current.tokenType == tokenType)
+        return true;
+    Error(tokenType);
+    return false;
 }
 
 void Parser::Advance()
@@ -158,10 +167,23 @@ void Parser::Advance()
 
 bool Parser::Consume(TokenType tokenType)
 {
-    if (current.tokenType == tokenType)
+    if (Expect(tokenType))
     {
         Advance();
         return true;
     }
     return false;
+}
+
+bool Parser::Peek(TokenType tokenType)
+{
+    return current.tokenType == tokenType;
+}
+
+void Parser::Error(TokenType tokenType)
+{
+    GetDiagEngine().Report(llvm::SMLoc::getFromPointer(current.ptr),
+                           diag::err_expected,
+                           Token::GetSpellingText(tokenType),
+                           llvm::StringRef(current.ptr, current.len));
 }

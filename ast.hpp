@@ -3,6 +3,7 @@
 #include <vector>
 #include "llvm/IR/Value.h"
 #include "type.hpp"
+#include "lexer.hpp"
 
 struct Program;
 struct AstNode;
@@ -48,7 +49,7 @@ struct AstNode {
 };
 
 struct VariableDecl : AstNode {
-    llvm::StringRef name;
+    Token token;
     VariableDecl() : AstNode(ND_VariableDecl) {}
     virtual llvm::Value *Accept(Visitor* v) { return v->VisitVariableDecl(this); }
     static bool classof(const AstNode* node) {
@@ -70,7 +71,7 @@ struct BinaryExpr : AstNode {
 };
 
 struct NumberExpr : AstNode {
-    int value;
+    Token token;
     virtual llvm::Value* Accept(Visitor* v) override {
         return v->VisitNumberExpr(this);
     }
@@ -81,7 +82,7 @@ struct NumberExpr : AstNode {
 };
 
 struct VariableAccessExpr : AstNode {
-    llvm::StringRef name;
+    Token token;
     VariableAccessExpr() : AstNode(ND_VariableAccessExpr) {}
     static bool classof(const AstNode* node) {
         return node->kind == ND_VariableAccessExpr;

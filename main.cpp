@@ -1,3 +1,4 @@
+#include <iostream>
 #include "lexer.hpp"
 #include "printVisitor.hpp"
 #include "codegen.hpp"
@@ -5,8 +6,8 @@
 #include "ast.hpp"
 #include "llvm/Support/MemoryBuffer.h"
 #include "llvm/Support/ErrorOr.h"
-#include <iostream>
 #include "sema.hpp"
+#include "diag_engine.hpp"
 
 int main(int argc, char* argv[]) {
     if(argc < 2) {
@@ -19,8 +20,12 @@ int main(int argc, char* argv[]) {
         llvm::errs() << "can't open file!";
         return -1;
     }
-    auto memBuf = std::move(*buf);
-    Lexer lex(memBuf->getBuffer());
+
+    llvm::SourceMgr mgr;
+    DiagEngine diag(mgr);
+    mgr.AddNewSourceBuffer(std::move(*buf), llvm::SMLoc());
+
+    Lexer lex(mgr, diag);
 
     // Token token; 
     // while(true) {
@@ -29,7 +34,7 @@ int main(int argc, char* argv[]) {
     //         break;
     //     token.Dump();
     // }
-    Sema sema;
+    Sema sema(diag);
 
     Parser parser(lex, sema);
     auto program = parser.ParseProgram();

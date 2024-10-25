@@ -2,6 +2,7 @@
 #include "type.hpp"
 #include "llvm/Support/StringSaver.h"
 #include "llvm/IR/Module.h"
+#include "diag_engine.hpp"
 
 #define TOKENNAME \
     X(unknow)     \
@@ -30,28 +31,33 @@ llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const TokenType &tokenType)
 
 struct Token
 {
-    Token() : row(-1), col(-1), tokenType(TokenType::unknow), value(-1) {}
     int row, col;
     TokenType tokenType;
     int value;
+    int len;
     CType *ty;
-    llvm::StringRef context;
+    const char* ptr;
     void Dump()
     {
-        llvm::outs() << "{ row: " << row << ", " << "col: " << col << ", " << "type: " << tokenType << ", "
-                     << "context: " << context << "}\n";
+        llvm::outs() << "{" << llvm::StringRef(ptr, len) << ", row = " << row << ", col = " << col << "}\n";
     }
+    static llvm::StringRef GetSpellingText(TokenType tokenType);
 };
 
 class Lexer
 {
 public:
-    Lexer(llvm::StringRef src);
+    Lexer(llvm::SourceMgr& mgr, DiagEngine& DiagEngine);
     void NextToken(Token &token);
     void SaveState();
     void RestoreState();
 
+    DiagEngine& GetDiagEngine() const {
+        return diagEngine;
+    }
 private:
+    llvm::SourceMgr &mgr;
+    DiagEngine& diagEngine;
     const char *BufPtr;
     const char *LineHeadPtr;
     const char *BufEnd;

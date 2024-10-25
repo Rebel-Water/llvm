@@ -1,35 +1,33 @@
 #include "sema.hpp"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/Casting.h"
+#include "lexer.hpp"
 
-std::shared_ptr<AstNode> Sema::SemaVarDeclNode(llvm::StringRef name, CType *ty)
+std::shared_ptr<AstNode> Sema::SemaVarDeclNode(Token token, CType *ty)
 {
-    auto symbol = scope.FindVarSymbolInCurEnv(name);
+    llvm::StringRef text(token.ptr, token.len);
+    auto symbol = scope.FindVarSymbolInCurEnv(text);
     if (symbol)
     {
-        llvm::errs() << "redefined variable" << name << "\n";
-        return nullptr;
+        diag.Report(llvm::SMLoc::getFromPointer(token.ptr), diag::err_redefined, text);
     }
 
-    scope.AddSymbol(SymbolKind::LocalVariable, ty, name);
+    scope.AddSymbol(SymbolKind::LocalVariable, ty, text);
 
     auto variableDecl = std::make_shared<VariableDecl>();
-    variableDecl->name = name;
+    variableDecl->token = token;
     variableDecl->ty = ty;
 
     return variableDecl;
 }
 
-std::shared_ptr<AstNode> Sema::SemaAssignExprNode(std::shared_ptr<AstNode> left, std::shared_ptr<AstNode> right)
+std::shared_ptr<AstNode> Sema::SemaAssignExprNode(std::shared_ptr<AstNode> left, std::shared_ptr<AstNode> right, Token token)
 {
-    if(left == nullptr || right == nullptr) {
-        llvm::errs() << "left or right cannot be nullptr\n";
-        return nullptr;
-    }
+    assert(left && right);
+    llvm::StringRef text(token.ptr, token.len);
 
     if(!llvm::isa<VariableAccessExpr>(left.get())) {
-        llvm::errs() << "must be left value\n";
-        return nullptr;
+        diag.Report(llvm::SMLoc::getFromPointer(token.ptr), diag::err_lvalue, text);
     }
 
     auto assignExpr = std::make_shared<AssignExpr>();
@@ -38,26 +36,26 @@ std::shared_ptr<AstNode> Sema::SemaAssignExprNode(std::shared_ptr<AstNode> left,
     return assignExpr;
 }
 
-std::shared_ptr<AstNode> Sema::SemaVarAccessNode(llvm::StringRef name)
+std::shared_ptr<AstNode> Sema::SemaVarAccessNode(Token token)
 {
-    auto symbol = scope.FindVarSymbol(name);
+    llvm::StringRef text(token.ptr, token.len);
+    auto symbol = scope.FindVarSymbol(text);
     if (symbol == nullptr)
     {
-        llvm::errs() << "use undefined variable" << name << "\n";
-        return nullptr;
+        diag.Report(llvm::SMLoc::getFromPointer(token.ptr), diag::err_undefined, text);
     }
 
     auto accessExpr = std::make_shared<VariableAccessExpr>();
-    accessExpr->name = name;
+    accessExpr->token = token;
     accessExpr->ty = symbol->ty;
 
     return accessExpr;
 }
 
-std::shared_ptr<AstNode> Sema::SemaNumberNode(int number, CType *ty)
+std::shared_ptr<AstNode> Sema::SemaNumberNode(Token token, CType *ty)
 {
     auto factor = std::make_shared<NumberExpr>();
-    factor->value = number;
+    factor->token = token;
     factor->ty = ty;
     return factor;
 }

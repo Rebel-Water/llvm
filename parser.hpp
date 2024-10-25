@@ -21,6 +21,11 @@ class Parser {
     std::shared_ptr<Program> ParseProgram();
     bool Expect(TokenType tokenType);
     bool Consume(TokenType tokenType);
+    bool Peek(TokenType tokenType);
+    void Error(TokenType tokenType);
     void Advance();
 
+    DiagEngine& GetDiagEngine() {
+        return lexer.GetDiagEngine();
+    }
 };
