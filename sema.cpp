@@ -26,7 +26,8 @@ std::shared_ptr<AstNode> Sema::SemaAssignExprNode(std::shared_ptr<AstNode> left,
     assert(left && right);
     llvm::StringRef text(token.ptr, token.len);
 
-    if(!llvm::isa<VariableAccessExpr>(left.get())) {
+    if (!llvm::isa<VariableAccessExpr>(left.get()))
+    {
         diag.Report(llvm::SMLoc::getFromPointer(token.ptr), diag::err_lvalue, text);
     }
 
@@ -67,4 +68,13 @@ std::shared_ptr<AstNode> Sema::SemaBinaryExprNode(std::shared_ptr<AstNode> left,
     binary->right = right;
     binary->opcode = op;
     return binary;
+}
+
+std::shared_ptr<AstNode> Sema::SemaIfStmtNode(std::shared_ptr<AstNode> condNode, std::shared_ptr<AstNode> thenNode, std::shared_ptr<AstNode> elseNode)
+{
+    auto node = std::make_shared<IfStmt>();
+    node->condNode = condNode;
+    node->thenNode = thenNode;
+    node->elseNode = elseNode;
+    return node;
 }

@@ -9,12 +9,16 @@
     X(number)     \
     X(identifier) \
     X(kw_int)     \
+    X(kw_if)     \
+    X(kw_else)     \
     X(minus)      \
     X(plus)       \
     X(star)       \
     X(slash)      \
     X(l_parent)   \
     X(r_parent)   \
+    X(l_brace)   \
+    X(r_brace)   \
     X(semi)       \
     X(equal)      \
     X(comma)      \
@@ -31,6 +35,8 @@ llvm::raw_ostream &operator<<(llvm::raw_ostream &os, const TokenType &tokenType)
 
 struct Token
 {
+    Token() = default;
+    Token(TokenType tokenType, int row, int col) : tokenType(tokenType), row(row), col(col) {}
     int row, col;
     TokenType tokenType;
     int value;

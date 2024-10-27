@@ -12,6 +12,9 @@ struct NumberExpr;
 struct AssignExpr;
 struct VariableDecl;
 struct VariableAccessExpr;
+struct IfStmt;
+struct DeclStmt;
+struct BlockStmt;
 
 class Visitor {
     public:
@@ -22,6 +25,9 @@ class Visitor {
     virtual llvm::Value* VisitNumberExpr(NumberExpr* expr) = 0;
     virtual llvm::Value* VisitAssignExpr(AssignExpr* expr) = 0;
     virtual llvm::Value* VisitVariableDecl(VariableDecl* expr) = 0;
+    virtual llvm::Value* VisitIfStmt(IfStmt* stmt) = 0;
+    virtual llvm::Value* VisitDeclStmt(DeclStmt* stmt) = 0;
+    virtual llvm::Value* VisitBlockStmt(BlockStmt* stmt) = 0;
     virtual llvm::Value* VisitVariableAccessExpr(VariableAccessExpr* expr) = 0;
 };
 
@@ -40,12 +46,44 @@ struct AstNode {
         ND_NumberExpr,
         ND_VariableAccessExpr,
         ND_Assign,
+        ND_IfStmt,
+        ND_DeclStmt,
+        ND_BlockStmt,
     };
     AstNode(const Kind& kind) : kind(kind) {}
     virtual ~AstNode() {}
     virtual llvm::Value *Accept(Visitor* v) { return nullptr; }
     CType* ty;
     const Kind kind;
+};
+
+struct BlockStmt : AstNode {
+    std::vector<std::shared_ptr<AstNode>> astVec;
+    BlockStmt() : AstNode(ND_BlockStmt) {}
+    virtual llvm::Value *Accept(Visitor* v) { return v->VisitBlockStmt(this); }
+    static bool classof(const AstNode* node) {
+        return node->kind == ND_BlockStmt;
+    }
+};
+
+struct DeclStmt : AstNode {
+    std::vector<std::shared_ptr<AstNode>> astVec;
+    DeclStmt() : AstNode(ND_DeclStmt) {}
+    virtual llvm::Value *Accept(Visitor* v) { return v->VisitDeclStmt(this); }
+    static bool classof(const AstNode* node) {
+        return node->kind == ND_DeclStmt;
+    }
+};
+
+struct IfStmt : AstNode {
+    std::shared_ptr<AstNode> condNode;
+    std::shared_ptr<AstNode> thenNode;
+    std::shared_ptr<AstNode> elseNode;
+    IfStmt() : AstNode(ND_IfStmt) {}
+    virtual llvm::Value *Accept(Visitor* v) { return v->VisitIfStmt(this); }
+    static bool classof(const AstNode* node) {
+        return node->kind == ND_IfStmt;
+    }
 };
 
 struct VariableDecl : AstNode {

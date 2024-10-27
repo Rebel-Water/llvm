@@ -20,3 +20,5 @@ endif()
 
 set(LLVM_LINK_COMPONENTS Support core)
 add_llvm_executable(${PROJECT_NAME} main.cpp lexer.cpp parser.cpp printVisitor.cpp codegen.cpp type.cpp scope.cpp sema.cpp diag_engine.cpp)
+
+add_subdirectory(unit_test)

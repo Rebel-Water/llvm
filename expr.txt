@@ -1,2 +1,8 @@
-int a, b = 4;
-int a;
+int aa, b = 3;
+aa = 0;
+aa = b = 4;
+if(0) {aa = 29;}
+else {
+    aa = 0;
+}
+aa + b * 3 + 5;

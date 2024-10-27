@@ -1,0 +1,5 @@
+if(EXISTS "/home/ace/llvm-project/project/build/unit_test/lexer/lexer_test[1]_tests.cmake")
+  include("/home/ace/llvm-project/project/build/unit_test/lexer/lexer_test[1]_tests.cmake")
+else()
+  add_test(lexer_test_NOT_BUILT lexer_test_NOT_BUILT)
+endif()

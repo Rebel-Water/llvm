@@ -57,15 +57,48 @@ llvm::Value *PrintVisitor::VisitAssignExpr(AssignExpr *expr)
 }
 llvm::Value *PrintVisitor::VisitVariableDecl(VariableDecl *decl)
 {
-    if(decl->ty == CType::GetIntTy()) {
+    if (decl->ty == CType::GetIntTy())
+    {
         llvm::StringRef text(decl->token.ptr, decl->token.len);
         llvm::outs() << "int " << text << ";";
     }
     return nullptr;
 }
-llvm::Value * PrintVisitor::VisitVariableAccessExpr(VariableAccessExpr *expr)
+llvm::Value *PrintVisitor::VisitVariableAccessExpr(VariableAccessExpr *expr)
 {
     llvm::StringRef text(expr->token.ptr, expr->token.len);
     llvm::outs() << text;
+    return nullptr;
+}
+
+llvm::Value *PrintVisitor::VisitIfStmt(IfStmt *stmt)
+{
+    llvm::outs() << "if (";
+    stmt->condNode->Accept(this);
+    llvm::outs() << ")";
+    stmt->thenNode->Accept(this);
+    if (stmt->elseNode)
+    {
+        llvm::outs() << "\nelse\n";
+        stmt->elseNode->Accept(this);
+    }
+    return nullptr;
+}
+
+llvm::Value *PrintVisitor::VisitDeclStmt(DeclStmt *stmt)
+{
+    for (auto &node : stmt->astVec)
+        node->Accept(this);
+    return nullptr;
+}
+
+llvm::Value *PrintVisitor::VisitBlockStmt(BlockStmt *stmt)
+{
+    llvm::outs() << "{\n";
+    for(const auto& stmt : stmt->astVec) {
+        stmt->Accept(this);
+        llvm::outs() << "{\n";
+    }
+    llvm::outs() << "}\n";
     return nullptr;
 }

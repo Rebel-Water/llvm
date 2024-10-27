@@ -56,8 +56,9 @@ void Lexer::NextToken(Token &token)
         int number = 0;
         do
         {
-            number += number * 10 + *BufPtr++ - '0';
-        } while (std::isdigit(*BufPtr));
+            number = number * 10 + *BufPtr - '0';
+            BufPtr++;
+        } while (IsDigit(*BufPtr));
         token.tokenType = TokenType::number;
         token.ptr = startPtr;
         token.len = BufPtr - startPtr;
@@ -76,6 +77,10 @@ void Lexer::NextToken(Token &token)
         auto text = llvm::StringRef(token.ptr, token.len);
         if (text == "int")
             token.tokenType = TokenType::kw_int;
+        else if(text == "if") 
+            token.tokenType = TokenType::kw_if;
+        else if(text == "else") 
+            token.tokenType = TokenType::kw_else;
     }
     else
     {
@@ -109,6 +114,12 @@ void Lexer::NextToken(Token &token)
             break;
         case '=':
             token.tokenType = TokenType::equal;
+            break;
+        case '{':
+            token.tokenType = TokenType::l_brace;
+            break;
+        case '}':
+            token.tokenType = TokenType::r_brace;
             break;
         default:
             diagEngine.Report(llvm::SMLoc::getFromPointer(BufPtr), diag::err_unknown_char, *BufPtr);

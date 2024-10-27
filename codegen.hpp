@@ -19,10 +19,14 @@ private:
     virtual llvm::Value* VisitAssignExpr(AssignExpr* expr) override;
     virtual llvm::Value* VisitVariableDecl(VariableDecl* decl) override;
     virtual llvm::Value* VisitVariableAccessExpr(VariableAccessExpr* expr) override;
+    virtual llvm::Value* VisitDeclStmt(DeclStmt* expr) override;
+    virtual llvm::Value* VisitIfStmt(IfStmt* expr) override;
+    virtual llvm::Value* VisitBlockStmt(BlockStmt* expr) override;
 
     llvm::LLVMContext context;
     llvm::IRBuilder<> irBuilder{context};
     std::shared_ptr<llvm::Module> module;
+    llvm::Function* curFunc{nullptr};
 
     llvm::StringMap<std::pair<llvm::Value*, llvm::Type*>> varAddrTypeMap;
 };

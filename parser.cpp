@@ -2,17 +2,17 @@
 #include <cassert>
 #include <mutex>
 
-std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
+std::shared_ptr<AstNode> Parser::ParseDeclStmt()
 {
     Consume(TokenType::kw_int);
     CType *baseTy = CType::GetIntTy();
-    std::vector<std::shared_ptr<AstNode>> astArr;
+    auto decl = std::make_shared<DeclStmt>();
 
     while (current.tokenType != TokenType::semi)
     {
         Token temp = current;
         auto variableDecl = sema.SemaVarDeclNode(temp, baseTy);
-        astArr.push_back(variableDecl);
+        decl->astVec.push_back(variableDecl);
         Consume(TokenType::identifier);
 
         // int a = 1, b = 2; => int a; a = 1; int b; b = 2;
@@ -23,13 +23,13 @@ std::vector<std::shared_ptr<AstNode>> Parser::PasreDeclStmt()
             auto right = ParseExpr();
             auto assignExpr = sema.SemaAssignExprNode(left, right, temp);
 
-            astArr.push_back(assignExpr);
+            decl->astVec.push_back(assignExpr);
         }
-        if(Peek(TokenType::comma))
+        if (Peek(TokenType::comma))
             Advance();
     }
     Expect(TokenType::semi);
-    return astArr;
+    return decl;
 }
 
 std::shared_ptr<AstNode> Parser::ParseFactor()
@@ -57,11 +57,69 @@ std::shared_ptr<AstNode> Parser::ParseFactor()
     }
 }
 
+std::shared_ptr<AstNode> Parser::ParseIfStmt()
+{
+    Consume(TokenType::kw_if);
+    Consume(TokenType::l_parent);
+    auto condExpr = ParseExpr();
+    Consume(TokenType::r_parent);
+    auto thenStmt = ParseStmt();
+    std::shared_ptr<AstNode> elseStmt = nullptr;
+    if(current.tokenType == TokenType::kw_else) {
+        Consume(TokenType::kw_else);
+        elseStmt = ParseStmt();
+    }
+    return sema.SemaIfStmtNode(condExpr, thenStmt, elseStmt);
+}
+
+std::shared_ptr<AstNode> Parser::ParseBlockStmt()
+{
+    sema.scope.EnterScope();
+    Consume(TokenType::l_brace);
+
+    auto blockstmt = std::make_shared<BlockStmt>();
+
+    while(current.tokenType != TokenType::r_brace) {
+        auto stmt = ParseStmt();
+        blockstmt->astVec.push_back(stmt);
+    }
+
+    Consume(TokenType::r_brace);
+    sema.scope.ExitScope();
+
+    return blockstmt;
+}
+
+std::shared_ptr<AstNode> Parser::ParseStmt()
+{
+    if (current.tokenType == TokenType::semi)
+    {
+        Advance();
+        return nullptr;
+    }
+    else if (current.tokenType == TokenType::kw_int)
+    {
+        return ParseDeclStmt();
+    }
+    else if (current.tokenType == TokenType::kw_if)
+    {
+        return ParseIfStmt();
+    }
+    else if(current.tokenType == TokenType::l_brace) {
+        return ParseBlockStmt();
+    }
+    else
+    {
+        return ParseExprStmt();
+    }
+    return nullptr; 
+}
+
 std::shared_ptr<AstNode> Parser::ParseExpr()
 {
     bool isAssignExpr = false;
     lexer.SaveState();
-    if (current.tokenType == TokenType::identifier)
+    if (current.tokenType == TokenType::identifier) // substitue for peekToken
     {
         Token next;
         lexer.NextToken(next);
@@ -82,7 +140,6 @@ std::shared_ptr<AstNode> Parser::ParseExpr()
             op = Opcode::sub;
         Advance();
         auto right = ParseTerm();
-        ;
         auto binaryExpr = sema.SemaBinaryExprNode(left, right, op);
         left = binaryExpr;
     }
@@ -123,22 +180,9 @@ std::shared_ptr<Program> Parser::ParseProgram()
     std::vector<std::shared_ptr<AstNode>> astVec;
     while (current.tokenType != TokenType::eof)
     {
-        if (current.tokenType == TokenType::semi)
-        {
-            Advance();
-            continue;
-        }
-        else if (current.tokenType == TokenType::kw_int)
-        {
-            const auto &decls = PasreDeclStmt();
-            for (auto &decl : decls)
-                astVec.push_back(decl);
-        }
-        else
-        {
-            auto expr = ParseExprStmt();
-            astVec.push_back(expr);
-        }
+        auto stmt = ParseStmt();
+        if (stmt)
+            astVec.push_back(stmt);
     }
     auto program = std::make_shared<Program>();
     program->astNodes = std::move(astVec);

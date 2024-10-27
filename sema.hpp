@@ -12,6 +12,6 @@ struct Sema {
     std::shared_ptr<AstNode> SemaVarAccessNode(Token token);
     std::shared_ptr<AstNode> SemaNumberNode(Token token, CType* ty);
     std::shared_ptr<AstNode> SemaBinaryExprNode(std::shared_ptr<AstNode> left, std::shared_ptr<AstNode> right, Opcode op);
+    std::shared_ptr<AstNode> SemaIfStmtNode(std::shared_ptr<AstNode> condNode, std::shared_ptr<AstNode> thenNode, std::shared_ptr<AstNode> elseNode);
     Scope scope;
-
 };

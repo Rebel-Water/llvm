@@ -8,14 +8,20 @@ llvm::Value *Codegen::VisitProgram(Program *p)
 
     auto mFuncType = llvm::FunctionType::get(irBuilder.getInt32Ty(), false);
     auto mFunc = llvm::Function::Create(mFuncType, llvm::GlobalValue::ExternalLinkage, "main", module.get());
+
+    curFunc = mFunc;
+
     auto entryBlock = llvm::BasicBlock::Create(context, "entry", mFunc);
     irBuilder.SetInsertPoint(entryBlock);
 
-    llvm::Value* lastValue = nullptr;
+    llvm::Value *lastValue = nullptr;
     for (auto &node : p->astNodes)
         lastValue = node->Accept(this);
 
-    irBuilder.CreateCall(printfFunc, {irBuilder.CreateGlobalString("expr val: %d\n"), lastValue});
+    if (lastValue)
+        irBuilder.CreateCall(printfFunc, {irBuilder.CreateGlobalString("expr val: %d\n"), lastValue});
+    else
+        irBuilder.CreateCall(printfFunc, {irBuilder.CreateGlobalString("last instruction is not expression.")});
 
     auto ret = irBuilder.CreateRet(irBuilder.getInt32(0));
     llvm::verifyFunction(*mFunc);
@@ -46,7 +52,7 @@ llvm::Value *Codegen::VisitBinaryExpr(BinaryExpr *binaryExpr)
 
 llvm::Value *Codegen::VisitAssignExpr(AssignExpr *expr)
 {
-    VariableAccessExpr* varAccessExpr = (VariableAccessExpr*)(expr->left.get());
+    VariableAccessExpr *varAccessExpr = (VariableAccessExpr *)(expr->left.get());
     llvm::StringRef text(varAccessExpr->token.ptr, varAccessExpr->token.len);
     auto pair = varAddrTypeMap[text];
     auto addr = pair.first;
@@ -75,6 +81,58 @@ llvm::Value *Codegen::VisitVariableAccessExpr(VariableAccessExpr *expr)
     llvm::Value *varAddr = pair.first;
     llvm::Type *ty = pair.second;
     return irBuilder.CreateLoad(ty, varAddr, text);
+}
+
+llvm::Value *Codegen::VisitDeclStmt(DeclStmt *stmt)
+{
+    llvm::Value *lastVal = nullptr;
+    for (const auto &node : stmt->astVec)
+        lastVal = node->Accept(this);
+    return lastVal;
+}
+
+llvm::Value *Codegen::VisitIfStmt(IfStmt *stmt)
+{
+    llvm::BasicBlock *condBB = llvm::BasicBlock::Create(context, "cond", curFunc);
+    llvm::BasicBlock *thenBB = llvm::BasicBlock::Create(context, "then", curFunc);
+    llvm::BasicBlock *elseBB = nullptr;
+    if (stmt->elseNode)
+        elseBB = llvm::BasicBlock::Create(context, "else", curFunc);
+    llvm::BasicBlock *lastBB = llvm::BasicBlock::Create(context, "last", curFunc);
+
+    irBuilder.CreateBr(condBB);
+    irBuilder.SetInsertPoint(condBB);
+    llvm::Value *val = stmt->condNode->Accept(this);
+
+    llvm::Value *condVal = irBuilder.CreateICmpNE(val, irBuilder.getInt32(0));
+    if (stmt->elseNode)
+    {
+        irBuilder.CreateCondBr(condVal, thenBB, elseBB);
+        irBuilder.SetInsertPoint(thenBB);
+        stmt->thenNode->Accept(this);
+        irBuilder.CreateBr(lastBB); // lastBB is a unconditional label
+
+        irBuilder.SetInsertPoint(elseBB);
+        stmt->elseNode->Accept(this);
+        irBuilder.CreateBr(lastBB);
+    }
+    else
+    {
+        irBuilder.CreateCondBr(condVal, thenBB, lastBB);
+        irBuilder.SetInsertPoint(thenBB);
+        stmt->thenNode->Accept(this);
+        irBuilder.CreateBr(lastBB);
+    }
+    irBuilder.SetInsertPoint(lastBB);
+    return nullptr;
+}
+
+llvm::Value *Codegen::VisitBlockStmt(BlockStmt *stmts)
+{
+    llvm::Value* lastVal = nullptr;
+    for(const auto& stmt : stmts->astVec)
+        lastVal = stmt->Accept(this);
+    return lastVal;
 }
 
 llvm::Value *Codegen::VisitNumberExpr(NumberExpr *expr)
