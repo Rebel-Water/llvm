@@ -4,24 +4,31 @@
 #include "llvm/IR/Module.h"
 #include "diag_engine.hpp"
 
-#define TOKENNAME \
-    X(unknow)     \
-    X(number)     \
-    X(identifier) \
-    X(kw_int)     \
-    X(kw_if)     \
-    X(kw_else)     \
-    X(minus)      \
-    X(plus)       \
-    X(star)       \
-    X(slash)      \
-    X(l_parent)   \
-    X(r_parent)   \
-    X(l_brace)   \
-    X(r_brace)   \
-    X(semi)       \
-    X(equal)      \
-    X(comma)      \
+#define TOKENNAME    \
+    X(unknow)        \
+    X(number)        \
+    X(identifier)    \
+    X(kw_int)        \
+    X(kw_if)         \
+    X(kw_else)       \
+    X(minus)         \
+    X(plus)          \
+    X(star)          \
+    X(slash)         \
+    X(l_parent)      \
+    X(r_parent)      \
+    X(l_brace)       \
+    X(r_brace)       \
+    X(semi)          \
+    X(equal)         \
+    X(comma)         \
+    X(equal_equal)   \
+    X(not_equal)     \
+    X(less)          \
+    X(greater)       \
+    X(greater_equal) \
+    X(less_equal)    \
+    X(not_)    \
     X(eof)
 
 enum class TokenType
@@ -42,7 +49,7 @@ struct Token
     int value;
     int len;
     CType *ty;
-    const char* ptr;
+    const char *ptr;
     void Dump()
     {
         llvm::outs() << "{" << llvm::StringRef(ptr, len) << ", row = " << row << ", col = " << col << "}\n";
@@ -53,17 +60,19 @@ struct Token
 class Lexer
 {
 public:
-    Lexer(llvm::SourceMgr& mgr, DiagEngine& DiagEngine);
+    Lexer(llvm::SourceMgr &mgr, DiagEngine &DiagEngine);
     void NextToken(Token &token);
     void SaveState();
     void RestoreState();
 
-    DiagEngine& GetDiagEngine() const {
+    DiagEngine &GetDiagEngine() const
+    {
         return diagEngine;
     }
+
 private:
     llvm::SourceMgr &mgr;
-    DiagEngine& diagEngine;
+    DiagEngine &diagEngine;
     const char *BufPtr;
     const char *LineHeadPtr;
     const char *BufEnd;

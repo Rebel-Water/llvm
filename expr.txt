@@ -1,8 +1,16 @@
-int aa, b = 3;
-aa = 0;
-aa = b = 4;
-if(0) {aa = 29;}
-else {
-    aa = 0;
+int aa, b = 4;
+aa = 1;
+aa = b = 0 - 2;
+if (b != 0) {
+    if (3 <= 0) {
+        b = 9;
+        aa = 19;
+    }
+    else {
+        aa = 30;
+    }
 }
-aa + b * 3 + 5;
+else {
+    b = 19;
+}
+aa + b * (4 + 5);

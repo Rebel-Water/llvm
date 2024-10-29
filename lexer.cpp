@@ -77,9 +77,9 @@ void Lexer::NextToken(Token &token)
         auto text = llvm::StringRef(token.ptr, token.len);
         if (text == "int")
             token.tokenType = TokenType::kw_int;
-        else if(text == "if") 
+        else if (text == "if")
             token.tokenType = TokenType::kw_if;
-        else if(text == "else") 
+        else if (text == "else")
             token.tokenType = TokenType::kw_else;
     }
     else
@@ -114,12 +114,45 @@ void Lexer::NextToken(Token &token)
             break;
         case '=':
             token.tokenType = TokenType::equal;
+            if (*(BufPtr + 1) == '=')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::equal_equal;
+                token.len = 2;
+            }
             break;
         case '{':
             token.tokenType = TokenType::l_brace;
             break;
         case '}':
             token.tokenType = TokenType::r_brace;
+            break;
+        case '<':
+            token.tokenType = TokenType::less;
+            if (*(BufPtr + 1) == '=')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::less_equal;
+                token.len = 2;
+            }
+            break;
+        case '>':
+            token.tokenType = TokenType::greater;
+            if (*(BufPtr + 1) == '=')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::greater_equal;
+                token.len = 2;
+            }
+            break;
+        case '!':
+            token.tokenType = TokenType::not_;
+            if (*(BufPtr + 1) == '=')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::not_equal;
+                token.len = 2;
+            }
             break;
         default:
             diagEngine.Report(llvm::SMLoc::getFromPointer(BufPtr), diag::err_unknown_char, *BufPtr);
@@ -190,6 +223,18 @@ llvm::StringRef Token::GetSpellingText(TokenType tokenType)
         return ",";
     case TokenType::identifier:
         return "identifier";
+    case TokenType::equal_equal:
+        return "==";
+    case TokenType::not_equal:
+        return "!=";
+    case TokenType::greater:
+        return ">";
+    case TokenType::greater_equal:
+        return ">=";
+    case TokenType::less_equal:
+        return "<=";
+    case TokenType::less:
+        return "<";
     case TokenType::number:
         return "number";
     default:

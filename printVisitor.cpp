@@ -33,6 +33,24 @@ llvm::Value *PrintVisitor::VisitBinaryExpr(BinaryExpr *binaryExpr)
     case Opcode::div:
         llvm::outs() << " / ";
         break;
+    case Opcode::less:
+        llvm::outs() << " < ";
+        break;
+    case Opcode::greater:
+        llvm::outs() << " > ";
+        break;
+    case Opcode::less_equal:
+        llvm::outs() << " <= ";
+        break;
+    case Opcode::greater_equal:
+        llvm::outs() << " >= ";
+        break;
+    case Opcode::equal_equal:
+        llvm::outs() << " == ";
+        break;
+    case Opcode::not_equal:
+        llvm::outs() << " != ";
+        break;
     default:
         break;
     }
@@ -97,7 +115,7 @@ llvm::Value *PrintVisitor::VisitBlockStmt(BlockStmt *stmt)
     llvm::outs() << "{\n";
     for(const auto& stmt : stmt->astVec) {
         stmt->Accept(this);
-        llvm::outs() << "{\n";
+        llvm::outs() << "\n";
     }
     llvm::outs() << "}\n";
     return nullptr;

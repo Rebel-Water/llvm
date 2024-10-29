@@ -36,6 +36,12 @@ enum class Opcode {
     sub,
     mul,
     div,
+    equal_equal,
+    not_equal,
+    less_equal,
+    less,
+    greater,
+    greater_equal,
 };
 
 // llvm rtti

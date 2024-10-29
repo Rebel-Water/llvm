@@ -44,6 +44,38 @@ llvm::Value *Codegen::VisitBinaryExpr(BinaryExpr *binaryExpr)
         return irBuilder.CreateNSWMul(left, right);
     case Opcode::div:
         return irBuilder.CreateSDiv(left, right);
+
+    case Opcode::equal_equal:
+    {
+        /// getIntTy()
+        llvm::Value *val = irBuilder.CreateICmpEQ(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::not_equal:
+    {
+        llvm::Value *val = irBuilder.CreateICmpNE(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::less:
+    {
+        llvm::Value *val = irBuilder.CreateICmpSLT(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::less_equal:
+    {
+        llvm::Value *val = irBuilder.CreateICmpSLE(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::greater:
+    {
+        llvm::Value *val = irBuilder.CreateICmpSGT(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::greater_equal:
+    {
+        llvm::Value *val = irBuilder.CreateICmpSGE(left, right);
+        return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
     default:
         break;
     }
@@ -129,8 +161,8 @@ llvm::Value *Codegen::VisitIfStmt(IfStmt *stmt)
 
 llvm::Value *Codegen::VisitBlockStmt(BlockStmt *stmts)
 {
-    llvm::Value* lastVal = nullptr;
-    for(const auto& stmt : stmts->astVec)
+    llvm::Value *lastVal = nullptr;
+    for (const auto &stmt : stmts->astVec)
         lastVal = stmt->Accept(this);
     return lastVal;
 }
