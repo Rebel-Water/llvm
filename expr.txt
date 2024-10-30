@@ -1,16 +1,7 @@
-int aa, b = 4;
-aa = 1;
-aa = b = 0 - 2;
-if (b != 0) {
-    if (3 <= 0) {
-        b = 9;
-        aa = 19;
-    }
-    else {
-        aa = 30;
-    }
+int aa = 1;
+for (int i = 0; i < 100; i = i + 1) {
+    aa = aa + i;
+    break;
+    continue;
 }
-else {
-    b = 19;
-}
-aa + b * (4 + 5);
+aa + aa * (4 + 5);

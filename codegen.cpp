@@ -159,12 +159,78 @@ llvm::Value *Codegen::VisitIfStmt(IfStmt *stmt)
     return nullptr;
 }
 
+llvm::Value *Codegen::VisitForStmt(ForStmt *stmt)
+{
+    auto initBB = llvm::BasicBlock::Create(context, "for.init", curFunc);
+    auto condBB = llvm::BasicBlock::Create(context, "for.cond", curFunc);
+    auto incBB = llvm::BasicBlock::Create(context, "for.inc", curFunc);
+    auto bodyBB = llvm::BasicBlock::Create(context, "for.body", curFunc);
+    auto lastBB = llvm::BasicBlock::Create(context, "for.last", curFunc);
+
+    breakBBs.insert({stmt, lastBB});
+    continueBBs.insert({stmt, incBB});
+
+    irBuilder.CreateBr(initBB);
+    irBuilder.SetInsertPoint(initBB);
+
+    if(stmt->init)
+        stmt->init->Accept(this);
+
+    irBuilder.CreateBr(condBB);
+    irBuilder.SetInsertPoint(condBB);
+
+    if(stmt->cond) {
+        auto val = stmt->cond->Accept(this);
+        auto condVal = irBuilder.CreateICmpNE(val, irBuilder.getInt32(0));
+        irBuilder.CreateCondBr(condVal, bodyBB, lastBB);
+    } else {
+        irBuilder.CreateBr(bodyBB);
+    }
+    irBuilder.SetInsertPoint(bodyBB);
+    if(stmt->body) {
+        stmt->body->Accept(this);
+    }
+    irBuilder.CreateBr(incBB);
+
+    irBuilder.SetInsertPoint(incBB);
+
+    if(stmt->inc)
+        stmt->inc->Accept(this);
+
+    irBuilder.CreateBr(condBB);
+
+    breakBBs.erase(stmt);
+    continueBBs.erase(stmt);
+    irBuilder.SetInsertPoint(lastBB);
+
+    return nullptr;
+}
+
 llvm::Value *Codegen::VisitBlockStmt(BlockStmt *stmts)
 {
     llvm::Value *lastVal = nullptr;
     for (const auto &stmt : stmts->astVec)
         lastVal = stmt->Accept(this);
     return lastVal;
+}
+
+llvm::Value *Codegen::VisitBreakStmt(BreakStmt *stmt)
+{
+    auto bb = breakBBs[stmt->target.get()];
+    irBuilder.CreateBr(bb);
+
+    auto out = llvm::BasicBlock::Create(context, "for.break.death", curFunc);
+    irBuilder.SetInsertPoint(out);
+    return nullptr;
+}
+
+llvm::Value *Codegen::VisitContinueStmt(ContinueStmt *stmt)
+{
+    auto bb = continueBBs[stmt->target.get()];
+    irBuilder.CreateBr(bb);
+    auto out = llvm::BasicBlock::Create(context, "for.continue.death", curFunc);
+    irBuilder.SetInsertPoint(out);
+    return nullptr;
 }
 
 llvm::Value *Codegen::VisitNumberExpr(NumberExpr *expr)

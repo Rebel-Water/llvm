@@ -81,6 +81,12 @@ void Lexer::NextToken(Token &token)
             token.tokenType = TokenType::kw_if;
         else if (text == "else")
             token.tokenType = TokenType::kw_else;
+        else if (text == "for")
+            token.tokenType = TokenType::kw_for;
+        else if (text == "break")
+            token.tokenType = TokenType::kw_break;
+        else if (text == "continue")
+            token.tokenType = TokenType::kw_continue;
     }
     else
     {
@@ -201,8 +207,18 @@ llvm::StringRef Token::GetSpellingText(TokenType tokenType)
 {
     switch (tokenType)
     {
+    case TokenType::kw_continue:
+        return "continue";
+    case TokenType::kw_break:
+        return "break";
     case TokenType::kw_int:
         return "int";
+    case TokenType::kw_if:
+        return "if";
+    case TokenType::kw_else:
+        return "else";
+    case TokenType::kw_for:
+        return "for";
     case TokenType::minus:
         return "-";
     case TokenType::plus:

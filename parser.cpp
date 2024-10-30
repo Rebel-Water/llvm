@@ -95,6 +95,52 @@ std::shared_ptr<AstNode> Parser::ParseIfStmt()
     return sema.SemaIfStmtNode(condExpr, thenStmt, elseStmt);
 }
 
+std::shared_ptr<AstNode> Parser::ParseForStmt()
+{
+    Consume(TokenType::kw_for);
+    Consume(TokenType::l_parent);
+
+    std::shared_ptr<ForStmt> node = std::make_shared<ForStmt>();
+    breakNodes.push_back(node);
+    continueNodes.push_back(node);
+
+    std::shared_ptr<AstNode> cond;
+    std::shared_ptr<AstNode> body;
+    std::shared_ptr<AstNode> inc;
+    std::shared_ptr<AstNode> init;
+
+    sema.scope.EnterScope();
+
+    if(IsTypeName()) {
+        init = ParseDeclStmt();
+    } else {
+        if(current.tokenType != TokenType::semi)
+            init = ParseExpr();
+        Consume(TokenType::semi);
+    }
+
+    if(current.tokenType != TokenType::semi)
+        cond = ParseExpr();
+    Consume(TokenType::semi);
+
+    if(current.tokenType != TokenType::r_parent)
+        inc = ParseExpr();
+    Consume(TokenType::r_parent);
+
+    body = ParseStmt();
+
+    node->init = init;
+    node->cond = cond;
+    node->inc = inc;
+    node->body = body;
+
+    breakNodes.pop_back();
+    continueNodes.pop_back();
+
+    sema.scope.ExitScope();
+    return node;
+}
+
 std::shared_ptr<AstNode> Parser::ParseBlockStmt()
 {
     sema.scope.EnterScope();
@@ -105,7 +151,8 @@ std::shared_ptr<AstNode> Parser::ParseBlockStmt()
     while (current.tokenType != TokenType::r_brace)
     {
         auto stmt = ParseStmt();
-        blockstmt->astVec.push_back(stmt);
+        if(stmt)
+            blockstmt->astVec.push_back(stmt);
     }
 
     Consume(TokenType::r_brace);
@@ -121,7 +168,7 @@ std::shared_ptr<AstNode> Parser::ParseStmt()
         Advance();
         return nullptr;
     }
-    else if (current.tokenType == TokenType::kw_int)
+    else if (IsTypeName())
     {
         return ParseDeclStmt();
     }
@@ -132,6 +179,15 @@ std::shared_ptr<AstNode> Parser::ParseStmt()
     else if (current.tokenType == TokenType::l_brace)
     {
         return ParseBlockStmt();
+    }
+    else if(current.tokenType == TokenType::kw_for) {
+        return ParseForStmt();
+    }
+    else if(current.tokenType == TokenType::kw_continue) {
+        return ParseContinueStmt();
+    }
+    else if(current.tokenType == TokenType::kw_break) {
+        return ParseBreakStmt();
     }
     else
     {
@@ -155,7 +211,8 @@ std::shared_ptr<AstNode> Parser::ParseExpr()
     if (isAssignExpr)
         return ParseAssignExpr();
 
-    return ParseEqualExpr();
+    auto ret = ParseEqualExpr();
+    return ret;
 }
 
 std::shared_ptr<AstNode> Parser::ParseEqualExpr()
@@ -210,6 +267,28 @@ std::shared_ptr<AstNode> Parser::ParseMultiExpr()
         left = binaryExpr;
     }
     return left;
+}
+
+std::shared_ptr<AstNode> Parser::ParseBreakStmt()
+{
+    if(breakNodes.empty())
+        Error(current.tokenType);
+    Consume(TokenType::kw_break);
+    auto node = std::make_shared<BreakStmt>();
+    node->target = breakNodes.back();
+    Consume(TokenType::semi);
+    return node;
+}
+
+std::shared_ptr<AstNode> Parser::ParseContinueStmt()
+{
+    if(continueNodes.empty())
+        Error(current.tokenType);
+    Consume(TokenType::kw_continue);
+    auto node = std::make_shared<ContinueStmt>();
+    node->target = continueNodes.back();
+    Consume(TokenType::semi);
+    return node;
 }
 
 std::shared_ptr<AstNode> Parser::ParseAssignExpr()
@@ -270,6 +349,13 @@ bool Parser::Consume(TokenType tokenType)
 bool Parser::Peek(TokenType tokenType)
 {
     return current.tokenType == tokenType;
+}
+
+bool Parser::IsTypeName()
+{
+    if(current.tokenType == TokenType::kw_int)
+        return true;
+    return false;
 }
 
 void Parser::Error(TokenType tokenType)

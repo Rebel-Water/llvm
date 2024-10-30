@@ -103,6 +103,39 @@ llvm::Value *PrintVisitor::VisitIfStmt(IfStmt *stmt)
     return nullptr;
 }
 
+llvm::Value *PrintVisitor::VisitForStmt(ForStmt *stmt)
+{
+    llvm::outs() << "for (";
+    if(stmt->init)
+        stmt->init->Accept(this);
+    llvm::outs() << ";";
+
+    if(stmt->cond)
+        stmt->cond->Accept(this);
+    llvm::outs() << ";";
+
+    if(stmt->inc)
+        stmt->inc->Accept(this);
+    llvm::outs() << ")";
+    
+    if(stmt->body)
+        stmt->body->Accept(this);
+
+    return nullptr;
+}
+
+llvm::Value *PrintVisitor::VisitBreakStmt(BreakStmt *stmt)
+{
+    llvm::outs() << "break;\n";
+    return nullptr;
+}
+
+llvm::Value *PrintVisitor::VisitContinueStmt(ContinueStmt *stmt)
+{
+    llvm::outs() << "continue;\n";
+    return nullptr;
+}
+
 llvm::Value *PrintVisitor::VisitDeclStmt(DeclStmt *stmt)
 {
     for (auto &node : stmt->astVec)

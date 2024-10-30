@@ -11,6 +11,9 @@
     X(kw_int)        \
     X(kw_if)         \
     X(kw_else)       \
+    X(kw_continue)   \
+    X(kw_break)      \
+    X(kw_for)        \
     X(minus)         \
     X(plus)          \
     X(star)          \
@@ -28,7 +31,7 @@
     X(greater)       \
     X(greater_equal) \
     X(less_equal)    \
-    X(not_)    \
+    X(not_)          \
     X(eof)
 
 enum class TokenType
