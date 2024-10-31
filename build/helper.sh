@@ -1,0 +1,1 @@
+bin/expr ../expr.txt > ../test.ll && ../../llvm_install_dir/bin/lli ../test.ll 

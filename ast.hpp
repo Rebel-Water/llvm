@@ -44,12 +44,20 @@ enum class Opcode
     sub,
     mul,
     div,
+    mod,
     equal_equal,
     not_equal,
     less_equal,
     less,
     greater,
     greater_equal,
+    logOr,
+    logAnd,
+    bitOr,
+    bitAnd,
+    bitXor,
+    leftShift,
+    rightShift,
 };
 
 // llvm rtti

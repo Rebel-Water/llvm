@@ -51,6 +51,30 @@ llvm::Value *PrintVisitor::VisitBinaryExpr(BinaryExpr *binaryExpr)
     case Opcode::not_equal:
         llvm::outs() << " != ";
         break;
+    case Opcode::bitAnd:
+        llvm::outs() << " & ";
+        break;
+    case Opcode::bitOr:
+        llvm::outs() << " | ";
+        break;
+    case Opcode::leftShift:
+        llvm::outs() << " << ";
+        break;
+    case Opcode::rightShift:
+        llvm::outs() << " >> ";
+        break;
+    case Opcode::bitXor:
+        llvm::outs() << " ^ ";
+        break;
+    case Opcode::logOr:
+        llvm::outs() << " || ";
+        break;
+    case Opcode::logAnd:
+        llvm::outs() << " && ";
+        break;
+    case Opcode::mod:
+        llvm::outs() << " % ";
+        break;
     default:
         break;
     }

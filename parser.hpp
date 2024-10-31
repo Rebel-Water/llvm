@@ -26,6 +26,13 @@ class Parser {
     std::shared_ptr<AstNode> ParseAssignExpr(); 
     std::shared_ptr<AstNode> ParsePrimary(); 
     std::shared_ptr<AstNode> ParseRelationalExpr(); 
+
+    std::shared_ptr<AstNode> ParseLogOrExpr(); 
+    std::shared_ptr<AstNode> ParseLogAndExpr(); 
+    std::shared_ptr<AstNode> ParseBitOrExpr(); 
+    std::shared_ptr<AstNode> ParseBitAndExpr(); 
+    std::shared_ptr<AstNode> ParseShiftExpr(); 
+    std::shared_ptr<AstNode> ParseBitXorExpr(); 
     public:
     Parser(Lexer& lexer, Sema& sema) : lexer(lexer) , sema(sema) {
         Advance();

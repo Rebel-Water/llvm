@@ -3,6 +3,11 @@
 #include "type.hpp"
 #include "diag_engine.hpp"
 
+static bool StartWith(const char *q, const char *p)
+{
+    return !std::strncmp(q, p, std::strlen(p));
+}
+
 static bool IsWhiteSpace(char ch)
 {
     return std::isspace(ch);
@@ -31,8 +36,26 @@ Lexer::Lexer(llvm::SourceMgr &mgr, DiagEngine &diagEngine) : mgr(mgr), diagEngin
 void Lexer::NextToken(Token &token)
 {
 
-    while (IsWhiteSpace(*BufPtr))
+    while (IsWhiteSpace(*BufPtr) || StartWith(BufPtr, "//") || StartWith(BufPtr, "/*"))
     {
+        if (StartWith(BufPtr, "//"))
+        {
+            while (*BufPtr != '\n')
+                BufPtr++;
+        }
+        if (StartWith(BufPtr, "/*"))
+        {
+            while (BufPtr[0] != '*' || BufPtr[1] != '/')
+            {
+                if (*BufPtr == '\n')
+                {
+                    row++;
+                    LineHeadPtr = BufPtr + 1;
+                }
+                BufPtr++;
+            }
+            BufPtr += 2;
+        }
         if (*BufPtr == '\n')
         {
             row++;
@@ -115,6 +138,9 @@ void Lexer::NextToken(Token &token)
         case ')':
             token.tokenType = TokenType::r_parent;
             break;
+        case '%':
+            token.tokenType = TokenType::percent;
+            break;
         case ',':
             token.tokenType = TokenType::comma;
             break;
@@ -141,6 +167,12 @@ void Lexer::NextToken(Token &token)
                 token.tokenType = TokenType::less_equal;
                 token.len = 2;
             }
+            else if (*(BufPtr + 1) == '<')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::less_less;
+                token.len = 2;
+            }
             break;
         case '>':
             token.tokenType = TokenType::greater;
@@ -148,6 +180,12 @@ void Lexer::NextToken(Token &token)
             {
                 BufPtr++;
                 token.tokenType = TokenType::greater_equal;
+                token.len = 2;
+            }
+            else if (*(BufPtr + 1) == '>')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::greater_greater;
                 token.len = 2;
             }
             break;
@@ -159,6 +197,27 @@ void Lexer::NextToken(Token &token)
                 token.tokenType = TokenType::not_equal;
                 token.len = 2;
             }
+            break;
+        case '|':
+            token.tokenType = TokenType::pipe;
+            if (*(BufPtr + 1) == '|')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::pipepipe;
+                token.len = 2;
+            }
+            break;
+        case '&':
+            token.tokenType = TokenType::amp;
+            if (*(BufPtr + 1) == '&')
+            {
+                BufPtr++;
+                token.tokenType = TokenType::ampamp;
+                token.len = 2;
+            }
+            break;
+        case '^':
+            token.tokenType = TokenType::caret;
             break;
         default:
             diagEngine.Report(llvm::SMLoc::getFromPointer(BufPtr), diag::err_unknown_char, *BufPtr);
@@ -239,6 +298,16 @@ llvm::StringRef Token::GetSpellingText(TokenType tokenType)
         return ",";
     case TokenType::identifier:
         return "identifier";
+    case TokenType::pipe:
+        return "|";
+    case TokenType::pipepipe:
+        return "||";
+    case TokenType::amp:
+        return "amp";
+    case TokenType::ampamp:
+        return "ampamp";
+    case TokenType::percent:
+        return "%";
     case TokenType::equal_equal:
         return "==";
     case TokenType::not_equal:

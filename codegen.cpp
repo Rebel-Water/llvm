@@ -32,49 +32,184 @@ llvm::Value *Codegen::VisitProgram(Program *p)
 
 llvm::Value *Codegen::VisitBinaryExpr(BinaryExpr *binaryExpr)
 {
-    auto left = binaryExpr->left->Accept(this);
-    auto right = binaryExpr->right->Accept(this);
     switch (binaryExpr->opcode)
     {
     case Opcode::add:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         return irBuilder.CreateNSWAdd(left, right);
+    }
     case Opcode::sub:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         return irBuilder.CreateNSWSub(left, right);
+    }
     case Opcode::mul:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         return irBuilder.CreateNSWMul(left, right);
+    }
     case Opcode::div:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         return irBuilder.CreateSDiv(left, right);
+    }
+    case Opcode::mod:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateSRem(left, right);
+    }
+    case Opcode::bitAnd:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateAnd(left, right);
+    }
+    case Opcode::bitOr:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateOr(left, right);
+    }
+    case Opcode::bitXor:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateXor(left, right);
+    }
+    case Opcode::leftShift:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateShl(left, right);
+    }
+    case Opcode::rightShift:
+    {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
+        return irBuilder.CreateAShr(left, right);
+    }
 
     case Opcode::equal_equal:
     {
-        /// getIntTy()
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpEQ(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
     }
     case Opcode::not_equal:
     {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpNE(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
     }
     case Opcode::less:
     {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpSLT(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
     }
     case Opcode::less_equal:
     {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpSLE(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
     }
     case Opcode::greater:
     {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpSGT(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
     }
     case Opcode::greater_equal:
     {
+        auto left = binaryExpr->left->Accept(this);
+        auto right = binaryExpr->right->Accept(this);
         llvm::Value *val = irBuilder.CreateICmpSGE(left, right);
         return irBuilder.CreateIntCast(val, irBuilder.getInt32Ty(), true);
+    }
+    case Opcode::logAnd:
+    {
+        /// A && B
+
+        llvm::BasicBlock *nextBB = llvm::BasicBlock::Create(context, "nextBB", curFunc);
+        llvm::BasicBlock *falseBB = llvm::BasicBlock::Create(context, "falseBB");
+        llvm::BasicBlock *mergeBB = llvm::BasicBlock::Create(context, "mergeBB");
+
+        llvm::Value *left = binaryExpr->left->Accept(this);
+        llvm::Value *val = irBuilder.CreateICmpNE(left, irBuilder.getInt32(0));
+        irBuilder.CreateCondBr(val, nextBB, falseBB);
+
+        irBuilder.SetInsertPoint(nextBB);
+        llvm::Value *right = binaryExpr->right->Accept(this);
+        right = irBuilder.CreateICmpNE(right, irBuilder.getInt32(0));
+        /// 32位 0 或着 1
+        right = irBuilder.CreateZExt(right, irBuilder.getInt32Ty());
+        irBuilder.CreateBr(mergeBB);
+
+        /// right 这个值，所在的基本块，并不一定是 之前的nextBB了.
+        /// 原因是：binaryExpr->right->Accept(this) 内部会生成新的基本块
+
+        /// 拿到当前插入的block, 建立一个值和基本块的关系 {right, nextBB}
+        nextBB = irBuilder.GetInsertBlock();
+
+        falseBB->insertInto(curFunc);
+        irBuilder.SetInsertPoint(falseBB);
+        irBuilder.CreateBr(mergeBB);
+
+        mergeBB->insertInto(curFunc);
+        irBuilder.SetInsertPoint(mergeBB);
+        llvm::PHINode *phi = irBuilder.CreatePHI(irBuilder.getInt32Ty(), 2);
+        phi->addIncoming(right, nextBB);
+        phi->addIncoming(irBuilder.getInt32(0), falseBB);
+
+        return phi;
+    }
+    case Opcode::logOr:
+    {
+        /// A || B && C
+
+        llvm::BasicBlock *nextBB = llvm::BasicBlock::Create(context, "nextBB", curFunc);
+        llvm::BasicBlock *trueBB = llvm::BasicBlock::Create(context, "trueBB");
+        llvm::BasicBlock *mergeBB = llvm::BasicBlock::Create(context, "mergeBB");
+
+        llvm::Value *left = binaryExpr->left->Accept(this);
+        llvm::Value *val = irBuilder.CreateICmpNE(left, irBuilder.getInt32(0));
+        irBuilder.CreateCondBr(val, trueBB, nextBB);
+
+        irBuilder.SetInsertPoint(nextBB);
+        /// 右子树内部也生成了基本块
+        llvm::Value *right = binaryExpr->right->Accept(this);
+        right = irBuilder.CreateICmpNE(right, irBuilder.getInt32(0));
+        /// 32位 0 或着 1
+        right = irBuilder.CreateZExt(right, irBuilder.getInt32Ty());
+        irBuilder.CreateBr(mergeBB);
+        /// right 这个值，所在的基本块，并不一定是 之前的nextBB了.
+        /// 原因是：binaryExpr->right->Accept(this) 内部会生成新的基本块
+
+        /// 拿到当前插入的block, 建立一个值和基本块的关系 {right, nextBB}
+        nextBB = irBuilder.GetInsertBlock();
+
+        trueBB->insertInto(curFunc);
+        irBuilder.SetInsertPoint(trueBB);
+        irBuilder.CreateBr(mergeBB);
+
+        mergeBB->insertInto(curFunc);
+        irBuilder.SetInsertPoint(mergeBB);
+        llvm::PHINode *phi = irBuilder.CreatePHI(irBuilder.getInt32Ty(), 2);
+        phi->addIncoming(right, nextBB);
+        phi->addIncoming(irBuilder.getInt32(1), trueBB);
+
+        return phi;
     }
     default:
         break;
@@ -173,28 +308,32 @@ llvm::Value *Codegen::VisitForStmt(ForStmt *stmt)
     irBuilder.CreateBr(initBB);
     irBuilder.SetInsertPoint(initBB);
 
-    if(stmt->init)
+    if (stmt->init)
         stmt->init->Accept(this);
 
     irBuilder.CreateBr(condBB);
     irBuilder.SetInsertPoint(condBB);
 
-    if(stmt->cond) {
+    if (stmt->cond)
+    {
         auto val = stmt->cond->Accept(this);
         auto condVal = irBuilder.CreateICmpNE(val, irBuilder.getInt32(0));
         irBuilder.CreateCondBr(condVal, bodyBB, lastBB);
-    } else {
+    }
+    else
+    {
         irBuilder.CreateBr(bodyBB);
     }
     irBuilder.SetInsertPoint(bodyBB);
-    if(stmt->body) {
+    if (stmt->body)
+    {
         stmt->body->Accept(this);
     }
     irBuilder.CreateBr(incBB);
 
     irBuilder.SetInsertPoint(incBB);
 
-    if(stmt->inc)
+    if (stmt->inc)
         stmt->inc->Accept(this);
 
     irBuilder.CreateBr(condBB);
