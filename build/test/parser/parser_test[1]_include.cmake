@@ -1,0 +1,5 @@
+if(EXISTS "/home/ace/llvm_project_1706/subc/build/test/parser/parser_test[1]_tests.cmake")
+  include("/home/ace/llvm_project_1706/subc/build/test/parser/parser_test[1]_tests.cmake")
+else()
+  add_test(parser_test_NOT_BUILT parser_test_NOT_BUILT)
+endif()
