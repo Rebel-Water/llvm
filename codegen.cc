@@ -31,18 +31,18 @@ llvm::Value * CodeGen::VisitProgram(Program *p) {
 
     llvm::Value *lastVal = nullptr;
     lastVal = p->node->Accept(this);
-    // if (lastVal)
-    //     irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("expr val: %d\n"), lastVal});
-    // else 
-    //     irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("last inst is not expr!!!")});
+    if (lastVal)
+        irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("expr val: %d\n"), lastVal});
+    else 
+        irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("last inst is not expr!!!")});
 
     /// 返回指令
     llvm::Value *ret = irBuilder.CreateRet(lastVal);
     verifyFunction(*mFunc);
 
-    if (verifyModule(*module, &llvm::outs())) {
+    //if (verifyModule(*module, &llvm::outs())) {
         module->print(llvm::outs(), nullptr);
-    }
+    //}
     return ret;
 }
 
@@ -53,9 +53,10 @@ llvm::Value * CodeGen::VisitBinaryExpr(BinaryExpr *binaryExpr) {
         left = binaryExpr->left->Accept(this);
         right = binaryExpr->right->Accept(this);
     }
+
     switch (binaryExpr->op)
     {
-    case BinaryOp::add: {
+    case BinaryOp::add: { // current int* p = &a; 3 + p; is not right
         llvm::Type *ty = binaryExpr->left->ty->Accept(this);
         if (ty->isPointerTy()) {
             llvm::Value *newVal = irBuilder.CreateInBoundsGEP(ty, left, {right});
