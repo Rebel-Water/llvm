@@ -3,6 +3,11 @@
 #include "ast.h"
 #include "diag_engine.h"
 class Sema {
+public:
+    enum class Mode {
+        Normal,
+        Skip
+    };
 private:
     DiagEngine &diagEngine;
 public:
@@ -17,11 +22,15 @@ public:
     std::shared_ptr<AstNode> SemaSizeofExprNode( std::shared_ptr<AstNode> unary,std::shared_ptr<CType> ty);
     std::shared_ptr<AstNode> SemaPostIncExprNode( std::shared_ptr<AstNode> left, Token tok);
     std::shared_ptr<AstNode> SemaPostDecExprNode( std::shared_ptr<AstNode> left, Token tok);
+    std::shared_ptr<AstNode> SemaPostSubscriptNode(std::shared_ptr<AstNode> left, std::shared_ptr<AstNode> node, Token tok);
 
+    std::shared_ptr<VariableDecl::InitValue> SemaDeclInitValue(std::shared_ptr<CType> declType, std::shared_ptr<AstNode> value, std::vector<int> &offsetList, Token tok);
     std::shared_ptr<AstNode> SemaIfStmtNode(std::shared_ptr<AstNode> condNode, std::shared_ptr<AstNode> thenNode, std::shared_ptr<AstNode> elseNode);
 
     void EnterScope();
     void ExitScope();
+    void SetMode(Mode mode);
 private:
     Scope scope;
+    Mode mode{Mode::Normal};
 };

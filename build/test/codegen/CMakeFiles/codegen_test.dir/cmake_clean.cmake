@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "../../../bin/codegen_test"
-  "../../../bin/codegen_test.pdb"
   "CMakeFiles/codegen_test.dir/__/__/codegen.cc.o"
   "CMakeFiles/codegen_test.dir/__/__/codegen.cc.o.d"
   "CMakeFiles/codegen_test.dir/__/__/diag_engine.cc.o"
@@ -17,6 +15,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/codegen_test.dir/__/__/type.cc.o.d"
   "CMakeFiles/codegen_test.dir/codegen_test.cc.o"
   "CMakeFiles/codegen_test.dir/codegen_test.cc.o.d"
+  "bin/codegen_test"
+  "bin/codegen_test.pdb"
   "codegen_test[1]_tests.cmake"
 )
 

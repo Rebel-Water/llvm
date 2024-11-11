@@ -21,6 +21,11 @@ private:
     std::shared_ptr<AstNode> ParseDeclStmt();
     std::shared_ptr<CType> ParseDeclSpec();
     std::shared_ptr<AstNode> Declarator(std::shared_ptr<CType> baseType);
+    std::shared_ptr<AstNode> DirectDeclarator(std::shared_ptr<CType> baseType);
+    std::shared_ptr<CType> DirectDeclaratorSuffix(std::shared_ptr<CType> baseType);
+    std::shared_ptr<CType> DirectDeclaratorArraySuffix(std::shared_ptr<CType> baseType);
+    bool ParseInitializer(std::vector<std::shared_ptr<VariableDecl::InitValue>> &arr, std::shared_ptr<CType> declType, std::vector<int> &offsetList, bool hasLBrace);
+
     std::shared_ptr<AstNode> ParseIfStmt();
     std::shared_ptr<AstNode> ParseForStmt();
     std::shared_ptr<AstNode> ParseBreakStmt();

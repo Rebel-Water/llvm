@@ -1,6 +1,7 @@
 #include "lexer.h"
 
-llvm::StringRef Token::GetSpellingText(TokenType tokenType) {
+llvm::StringRef Token::GetSpellingText(TokenType tokenType)
+{
     switch (tokenType)
     {
     case TokenType::number:
@@ -103,57 +104,74 @@ llvm::StringRef Token::GetSpellingText(TokenType tokenType) {
         return "?";
     case TokenType::colon:
         return ":";
+    case TokenType::l_bracket:
+        return "[";
+    case TokenType::r_bracket:
+        return "]";
     default:
         llvm::llvm_unreachable_internal();
     }
 }
 
-bool IsWhiteSpace(char ch) {
+bool IsWhiteSpace(char ch)
+{
     return ch == ' ' || ch == '\r' || ch == '\n';
 }
 
-bool IsDigit(char ch) {
+bool IsDigit(char ch)
+{
     return (ch >= '0' && ch <= '9');
 }
 
-bool IsLetter(char ch) {
+bool IsLetter(char ch)
+{
     return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') || (ch == '_');
 }
 
-bool Lexer::StartWith(const char *p) {
+bool Lexer::StartWith(const char *p)
+{
     return !strncmp(BufPtr, p, strlen(p));
 }
 
-void Lexer::NextToken(Token &tok) {
-    
-    /// 1. 过滤空格 
-    while (IsWhiteSpace(*BufPtr) || StartWith("//") || StartWith("/*")) {
-        if (StartWith("//")) {
-            while (*BufPtr != '\n'){
+void Lexer::NextToken(Token &tok)
+{
+
+    /// 1. 过滤空格
+    while (IsWhiteSpace(*BufPtr) || StartWith("//") || StartWith("/*"))
+    {
+        if (StartWith("//"))
+        {
+            while (*BufPtr != '\n')
+            {
                 BufPtr++;
             }
         }
 
-        if (StartWith("/*")) {
-            while (BufPtr[0] != '*' || BufPtr[1] != '/') {
-                if (*BufPtr == '\n') {
+        if (StartWith("/*"))
+        {
+            while (BufPtr[0] != '*' || BufPtr[1] != '/')
+            {
+                if (*BufPtr == '\n')
+                {
                     row++;
-                    LineHeadPtr = BufPtr+1;
+                    LineHeadPtr = BufPtr + 1;
                 }
                 BufPtr++;
             }
             BufPtr += 2;
         }
 
-        if (*BufPtr == '\n') {
+        if (*BufPtr == '\n')
+        {
             row++;
-            LineHeadPtr = BufPtr+1;
+            LineHeadPtr = BufPtr + 1;
         }
         BufPtr++;
     }
 
     /// 2. 判断是否到结尾
-    if (BufPtr >= BufEnd) {
+    if (BufPtr >= BufEnd)
+    {
         tok.tokenType = TokenType::eof;
         return;
     }
@@ -162,9 +180,11 @@ void Lexer::NextToken(Token &tok) {
     tok.col = BufPtr - LineHeadPtr + 1;
 
     const char *StartPtr = BufPtr;
-    if (IsDigit(*BufPtr)) {
+    if (IsDigit(*BufPtr))
+    {
         int number = 0;
-        while (IsDigit(*BufPtr)) {
+        while (IsDigit(*BufPtr))
+        {
             number = number * 10 + (*BufPtr++ - '0');
         }
         tok.tokenType = TokenType::number;
@@ -172,46 +192,68 @@ void Lexer::NextToken(Token &tok) {
         tok.ty = CType::IntType;
         tok.ptr = StartPtr;
         tok.len = BufPtr - StartPtr;
-    } else if (IsLetter(*BufPtr)) {
-        while (IsLetter(*BufPtr) || IsDigit(*BufPtr)) {
+    }
+    else if (IsLetter(*BufPtr))
+    {
+        while (IsLetter(*BufPtr) || IsDigit(*BufPtr))
+        {
             BufPtr++;
         }
         tok.tokenType = TokenType::identifier;
         tok.ptr = StartPtr;
         tok.len = BufPtr - StartPtr;
         llvm::StringRef text = llvm::StringRef(tok.ptr, tok.len);
-        if (text == "int") {
+        if (text == "int")
+        {
             tok.tokenType = TokenType::kw_int;
-        }else if (text == "if") {
+        }
+        else if (text == "if")
+        {
             tok.tokenType = TokenType::kw_if;
-        }else if (text == "else") {
+        }
+        else if (text == "else")
+        {
             tok.tokenType = TokenType::kw_else;
-        }else if (text == "for") {
+        }
+        else if (text == "for")
+        {
             tok.tokenType = TokenType::kw_for;
-        }else if (text == "break") {
+        }
+        else if (text == "break")
+        {
             tok.tokenType = TokenType::kw_break;
-        }else if (text == "continue") {
+        }
+        else if (text == "continue")
+        {
             tok.tokenType = TokenType::kw_continue;
-        }else if (text == "sizeof") {
+        }
+        else if (text == "sizeof")
+        {
             tok.tokenType = TokenType::kw_sizeof;
         }
     }
-    else {
+    else
+    {
         switch (*BufPtr)
         {
-        case '+': {
-            if (BufPtr[1] == '+') {
+        case '+':
+        {
+            if (BufPtr[1] == '+')
+            {
                 tok.tokenType = TokenType::plus_plus;
-                BufPtr+=2;
-                tok.ptr = StartPtr;
-                tok.len = 2;
-            }else if (BufPtr[1] == '=') {
-                tok.tokenType = TokenType::plus_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
             }
-            else {
+            else if (BufPtr[1] == '=')
+            {
+                tok.tokenType = TokenType::plus_equal;
+                BufPtr += 2;
+                tok.ptr = StartPtr;
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::plus;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -219,19 +261,24 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '-': {
-            if (BufPtr[1] == '-') {
+        case '-':
+        {
+            if (BufPtr[1] == '-')
+            {
                 tok.tokenType = TokenType::minus_minus;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else if (BufPtr[1] == '=') {
+            }
+            else if (BufPtr[1] == '=')
+            {
                 tok.tokenType = TokenType::minus_equal;
                 BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
             }
-            else {
+            else
+            {
                 tok.tokenType = TokenType::minus;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -239,13 +286,17 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '*':{
-            if (BufPtr[1] == '=') {
+        case '*':
+        {
+            if (BufPtr[1] == '=')
+            {
                 tok.tokenType = TokenType::star_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
-                tok.len = 2;                
-            }else {
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::star;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -253,13 +304,17 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '/':{
-            if (BufPtr[1] == '=') {
+        case '/':
+        {
+            if (BufPtr[1] == '=')
+            {
                 tok.tokenType = TokenType::slash_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
-                tok.len = 2;                
-            }else {            
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::slash;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -267,13 +322,17 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '%':{
-            if (BufPtr[1] == '=') {
+        case '%':
+        {
+            if (BufPtr[1] == '=')
+            {
                 tok.tokenType = TokenType::percent_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
-                tok.len = 2;                
-            }else {              
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::percent;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -281,116 +340,141 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case ';':{
+        case ';':
+        {
             tok.tokenType = TokenType::semi;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
         }
-        case '(':{
+        case '(':
+        {
             tok.tokenType = TokenType::l_parent;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
         }
-        case ')':{
+        case ')':
+        {
             tok.tokenType = TokenType::r_parent;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
-        }   
-        case '=':{
-            if (*(BufPtr+1) == '=') {
+        }
+        case '=':
+        {
+            if (*(BufPtr + 1) == '=')
+            {
                 tok.tokenType = TokenType::equal_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else {
+            }
+            else
+            {
                 tok.tokenType = TokenType::equal;
                 BufPtr++;
                 tok.ptr = StartPtr;
                 tok.len = 1;
             }
             break;
-        } 
-        case '|':{
-            if (*(BufPtr+1) == '|') {
+        }
+        case '|':
+        {
+            if (*(BufPtr + 1) == '|')
+            {
                 tok.tokenType = TokenType::pipepipe;
-                BufPtr+=2;
-                tok.ptr = StartPtr;
-                tok.len = 2;
-            } else if (*(BufPtr+1) == '=') {
-                tok.tokenType = TokenType::pipe_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
             }
-            else {
+            else if (*(BufPtr + 1) == '=')
+            {
+                tok.tokenType = TokenType::pipe_equal;
+                BufPtr += 2;
+                tok.ptr = StartPtr;
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::pipe;
                 BufPtr++;
                 tok.ptr = StartPtr;
                 tok.len = 1;
             }
             break;
-        } 
-        case '&':{
-            if (*(BufPtr+1) == '&') {
+        }
+        case '&':
+        {
+            if (*(BufPtr + 1) == '&')
+            {
                 tok.tokenType = TokenType::ampamp;
-                BufPtr+=2;
-                tok.ptr = StartPtr;
-                tok.len = 2;
-            } else if (*(BufPtr+1) == '=') {
-                tok.tokenType = TokenType::amp_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
             }
-            else {
+            else if (*(BufPtr + 1) == '=')
+            {
+                tok.tokenType = TokenType::amp_equal;
+                BufPtr += 2;
+                tok.ptr = StartPtr;
+                tok.len = 2;
+            }
+            else
+            {
                 tok.tokenType = TokenType::amp;
                 BufPtr++;
                 tok.ptr = StartPtr;
                 tok.len = 1;
             }
             break;
-        } 
-        case '~': {
+        }
+        case '~':
+        {
             tok.tokenType = TokenType::tilde;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
-        }             
-        case ',':{
+        }
+        case ',':
+        {
             tok.tokenType = TokenType::comma;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
-        } 
-        case '{': {
+        }
+        case '{':
+        {
             tok.tokenType = TokenType::l_brace;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
-        }     
-        case '}': {
+        }
+        case '}':
+        {
             tok.tokenType = TokenType::r_brace;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
         }
-        case '^': {
-            if (*(BufPtr+1) == '=') {
+        case '^':
+        {
+            if (*(BufPtr + 1) == '=')
+            {
                 tok.tokenType = TokenType::caret_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else {
+            }
+            else
+            {
                 tok.tokenType = TokenType::caret;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -398,25 +482,34 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '<': {
-            if (*(BufPtr+1) == '=') {
+        case '<':
+        {
+            if (*(BufPtr + 1) == '=')
+            {
                 tok.tokenType = TokenType::less_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else if (*(BufPtr+1) == '<') {
-                if (BufPtr[2] == '=') {
+            }
+            else if (*(BufPtr + 1) == '<')
+            {
+                if (BufPtr[2] == '=')
+                {
                     tok.tokenType = TokenType::less_less_equal;
-                    BufPtr+=3;
+                    BufPtr += 3;
                     tok.ptr = StartPtr;
                     tok.len = 3;
-                }else {
+                }
+                else
+                {
                     tok.tokenType = TokenType::less_less;
-                    BufPtr+=2;
+                    BufPtr += 2;
                     tok.ptr = StartPtr;
                     tok.len = 2;
                 }
-            }else {
+            }
+            else
+            {
                 tok.tokenType = TokenType::less;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -424,39 +517,52 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '>': {
-            if (*(BufPtr+1) == '=') {
+        case '>':
+        {
+            if (*(BufPtr + 1) == '=')
+            {
                 tok.tokenType = TokenType::greater_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else if (*(BufPtr+1) == '>') {
-                if (BufPtr[2] == '=') {
+            }
+            else if (*(BufPtr + 1) == '>')
+            {
+                if (BufPtr[2] == '=')
+                {
                     tok.tokenType = TokenType::greater_greater_equal;
-                    BufPtr+=3;
+                    BufPtr += 3;
                     tok.ptr = StartPtr;
                     tok.len = 3;
-                }else {
+                }
+                else
+                {
                     tok.tokenType = TokenType::greater_greater;
-                    BufPtr+=2;
+                    BufPtr += 2;
                     tok.ptr = StartPtr;
                     tok.len = 2;
                 }
-            }else {
+            }
+            else
+            {
                 tok.tokenType = TokenType::greater;
                 BufPtr++;
                 tok.ptr = StartPtr;
                 tok.len = 1;
-            }            
+            }
             break;
         }
-        case '!': {
-            if (*(BufPtr+1) == '=') {
+        case '!':
+        {
+            if (*(BufPtr + 1) == '=')
+            {
                 tok.tokenType = TokenType::not_equal;
-                BufPtr+=2;
+                BufPtr += 2;
                 tok.ptr = StartPtr;
                 tok.len = 2;
-            }else {
+            }
+            else
+            {
                 tok.tokenType = TokenType::exclaim;
                 BufPtr++;
                 tok.ptr = StartPtr;
@@ -464,18 +570,36 @@ void Lexer::NextToken(Token &tok) {
             }
             break;
         }
-        case '?': {
+        case '?':
+        {
             tok.tokenType = TokenType::question;
             BufPtr++;
             tok.ptr = StartPtr;
             tok.len = 1;
             break;
         }
-        case ':': {
+        case ':':
+        {
             tok.tokenType = TokenType::colon;
             BufPtr++;
             tok.ptr = StartPtr;
-            tok.len = 1;            
+            tok.len = 1;
+            break;
+        }
+        case '[':
+        {
+            tok.tokenType = TokenType::l_bracket;
+            BufPtr++;
+            tok.ptr = StartPtr;
+            tok.len = 1;
+            break;
+        }
+        case ']':
+        {
+            tok.tokenType = TokenType::r_bracket;
+            BufPtr++;
+            tok.ptr = StartPtr;
+            tok.len = 1;
             break;
         }
         default:
@@ -485,14 +609,16 @@ void Lexer::NextToken(Token &tok) {
     }
 }
 
-void Lexer::SaveState() {
+void Lexer::SaveState()
+{
     state.BufPtr = BufPtr;
     state.LineHeadPtr = LineHeadPtr;
     state.BufEnd = BufEnd;
     state.row = row;
 }
 
-void Lexer::RestoreState() {
+void Lexer::RestoreState()
+{
     BufPtr = state.BufPtr;
     LineHeadPtr = state.LineHeadPtr;
     BufEnd = state.BufEnd;

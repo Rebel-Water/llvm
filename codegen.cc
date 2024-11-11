@@ -422,9 +422,25 @@ llvm::Value * CodeGen::VisitVariableDecl(VariableDecl *decl) {
     llvm::Value *value = irBuilder.CreateAlloca(ty, nullptr, text);
     varAddrTypeMap.insert({text, {value, ty}});
 
-    if (decl->init) {
-        llvm::Value *initValue = decl->init->Accept(this);
-        irBuilder.CreateStore(initValue, value);
+    if (decl->initValues.size() > 0) {
+        if (decl->initValues.size() == 1) {
+            llvm::Value *initValue = decl->initValues[0]->value->Accept(this);
+            irBuilder.CreateStore(initValue, value);
+        }else {
+            if (llvm::ArrayType *arrType = llvm::dyn_cast<llvm::ArrayType>(ty)) {
+                for (const auto &initValue : decl->initValues) {
+                    llvm::SmallVector<llvm::Value *> vec;
+                    for (auto &offset : initValue->offsetList) {
+                        vec.push_back(irBuilder.getInt32(offset));
+                    }
+                    llvm::Value *addr = irBuilder.CreateInBoundsGEP(arrType->getElementType(),value, vec);
+                    llvm::Value *v = initValue->value->Accept(this);
+                    irBuilder.CreateStore(v, addr);
+                }
+            }else {
+                assert(0);
+            }
+        }
     }
     return value;
 }
@@ -545,6 +561,15 @@ llvm::Value * CodeGen::VisitPostDecExpr(PostDecExpr *expr) {
     }
 }
 
+llvm::Value * CodeGen::VisitPostSubscript(PostSubscript *expr) {
+    llvm::Type *ty = expr->ty->Accept(this);
+    llvm::Value *left = expr->left->Accept(this);
+    llvm::Value *offset = expr->node->Accept(this);
+
+    llvm::Value *addr = irBuilder.CreateInBoundsGEP(ty, llvm::dyn_cast<LoadInst>(left)->getPointerOperand(), {offset});
+    return irBuilder.CreateLoad(ty, addr);
+}
+
 llvm::Value * CodeGen::VisitThreeExpr(ThreeExpr *expr) {
     llvm::Value *val = expr->cond->Accept(this);
     llvm::Value *cond = irBuilder.CreateICmpNE(val, irBuilder.getInt32(0));
@@ -594,4 +619,9 @@ llvm::Type * CodeGen::VisitPrimaryType(CPrimaryType *ty) {
 llvm::Type * CodeGen::VisitPointType(CPointType *ty) {
     llvm::Type *baseType = ty->GetBaseType()->Accept(this);
     return llvm::PointerType::getUnqual(baseType);
+}
+
+llvm::Type * CodeGen::VisitArrayType(CArrayType *ty) {
+    llvm::Type *elementType = ty->GetElementType()->Accept(this);
+    return llvm::ArrayType::get(elementType, ty->GetElement());
 }

@@ -6,5 +6,5 @@ CXX_DEFINES = -DGTEST_HAS_RTTI=0
 
 CXX_INCLUDES = -I/home/ace/llvm_project_1706/subc/. -I/home/ace/llvm_project_1706/llvm_install_dir/include
 
-CXX_FLAGS =  -fno-rtti   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -funwind-tables -fno-rtti
+CXX_FLAGS =  -fno-rtti -g -g   -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS  -fno-exceptions -funwind-tables -fno-rtti
 

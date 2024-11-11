@@ -57,6 +57,8 @@ enum class TokenType : uint8_t{
     pipe_equal,     // |=
     question,       // ?
     colon,          // :
+    l_bracket,    // [
+    r_bracket,    // ]
     eof             // end
 };
 

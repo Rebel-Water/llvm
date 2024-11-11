@@ -195,36 +195,36 @@ codegen_test_OBJECTS = \
 # External object files for target codegen_test
 codegen_test_EXTERNAL_OBJECTS =
 
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/codegen_test.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/lexer.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/type.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/diag_engine.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/parser.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/sema.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/scope.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/codegen.cc.o
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/build.make
-../bin/codegen_test: lib/libgtest_main.a
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMMCJIT.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMOrcJIT.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86CodeGen.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86AsmParser.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Desc.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Disassembler.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Info.so.17
-../bin/codegen_test: lib/libgtest.a
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMExecutionEngine.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMRuntimeDyld.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMCore.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMMC.so.17
-../bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMSupport.so.17
-../bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable ../../../bin/codegen_test"
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/codegen_test.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/lexer.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/type.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/diag_engine.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/parser.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/sema.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/scope.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/__/__/codegen.cc.o
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/build.make
+test/codegen/bin/codegen_test: lib/libgtest_main.a
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMMCJIT.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMOrcJIT.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86CodeGen.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86AsmParser.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Desc.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Disassembler.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMX86Info.so.17
+test/codegen/bin/codegen_test: lib/libgtest.a
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMExecutionEngine.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMRuntimeDyld.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMCore.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMMC.so.17
+test/codegen/bin/codegen_test: /home/ace/llvm_project_1706/llvm_install_dir/lib/libLLVMSupport.so.17
+test/codegen/bin/codegen_test: test/codegen/CMakeFiles/codegen_test.dir/link.txt
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable bin/codegen_test"
 	cd /home/ace/llvm_project_1706/subc/build/test/codegen && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/codegen_test.dir/link.txt --verbose=$(VERBOSE)
-	cd /home/ace/llvm_project_1706/subc/build/test/codegen && /usr/bin/cmake -D TEST_TARGET=codegen_test -D TEST_EXECUTABLE=/home/ace/llvm_project_1706/subc/bin/codegen_test -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/ace/llvm_project_1706/subc/build/test/codegen -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=codegen_test_TESTS -D CTEST_FILE=/home/ace/llvm_project_1706/subc/build/test/codegen/codegen_test[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /usr/share/cmake-3.22/Modules/GoogleTestAddTests.cmake
+	cd /home/ace/llvm_project_1706/subc/build/test/codegen && /usr/bin/cmake -D TEST_TARGET=codegen_test -D TEST_EXECUTABLE=/home/ace/llvm_project_1706/subc/build/test/codegen/bin/codegen_test -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/ace/llvm_project_1706/subc/build/test/codegen -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=codegen_test_TESTS -D CTEST_FILE=/home/ace/llvm_project_1706/subc/build/test/codegen/codegen_test[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /usr/share/cmake-3.22/Modules/GoogleTestAddTests.cmake
 
 # Rule to build all files generated by this target.
-test/codegen/CMakeFiles/codegen_test.dir/build: ../bin/codegen_test
+test/codegen/CMakeFiles/codegen_test.dir/build: test/codegen/bin/codegen_test
 .PHONY : test/codegen/CMakeFiles/codegen_test.dir/build
 
 test/codegen/CMakeFiles/codegen_test.dir/clean:

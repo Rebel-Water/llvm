@@ -4,19 +4,22 @@
 
 class CPrimaryType;
 class CPointType;
+class CArrayType;
 
 class TypeVisitor {
 public:
     virtual ~TypeVisitor() {}
     virtual llvm::Type * VisitPrimaryType(CPrimaryType *ty) = 0;
     virtual llvm::Type * VisitPointType(CPointType *ty) = 0;
+    virtual llvm::Type * VisitArrayType(CArrayType*ty) = 0;
 };
 
 class CType {
 public:
     enum Kind {
         TY_Int,
-        TY_Point
+        TY_Point,
+        TY_Array
     };
 private:
     Kind kind;
@@ -26,6 +29,8 @@ public:
     CType(Kind kind, int size, int align):kind(kind), size(size), align(align) {}
     virtual ~CType() {}
     const Kind GetKind() const {return kind;}
+    const int GetSize() const {return size;}
+    const int GetAlign() const {return align;}
     virtual llvm::Type * Accept(TypeVisitor *v) {return nullptr;}
 
     static std::shared_ptr<CType> IntType;
@@ -61,4 +66,30 @@ public:
     static bool classof(const CType *ty) {
         return ty->GetKind() == TY_Point;
     }
+};
+
+class CArrayType : public CType {
+    private:
+    std::shared_ptr<CType> elementType;
+    int elementCount;
+    public:
+    CArrayType(std::shared_ptr<CType> elementType, int elementCount)
+        : CType(Kind::TY_Array, elementCount * elementType->GetSize(), elementType->GetAlign()), elementType(elementType), elementCount(elementCount) {}
+    
+    std::shared_ptr<CType> GetElementType() {
+        return elementType;
+    }
+
+    const int GetElement() const {
+        return elementCount;
+    }
+
+    llvm::Type* Accept(TypeVisitor* v) override {
+        return v->VisitArrayType(this);
+    }
+
+    static bool classof(const CType* ty) {
+        return ty->GetKind() == TY_Array;
+    }
+
 };

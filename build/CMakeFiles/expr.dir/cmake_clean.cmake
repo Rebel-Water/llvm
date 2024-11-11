@@ -1,6 +1,4 @@
 file(REMOVE_RECURSE
-  "../bin/expr"
-  "../bin/expr.pdb"
   "CMakeFiles/expr.dir/codegen.cc.o"
   "CMakeFiles/expr.dir/codegen.cc.o.d"
   "CMakeFiles/expr.dir/diag_engine.cc.o"
@@ -19,6 +17,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/expr.dir/sema.cc.o.d"
   "CMakeFiles/expr.dir/type.cc.o"
   "CMakeFiles/expr.dir/type.cc.o.d"
+  "bin/expr"
+  "bin/expr.pdb"
 )
 
 # Per-language clean rules from dependency scanning.
