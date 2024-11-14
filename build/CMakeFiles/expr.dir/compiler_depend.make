@@ -1224,7 +1224,7 @@ CMakeFiles/expr.dir/main.cc.o: ../main.cc \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/AllocatorBase.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/MemAlloc.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h \
-  ../printVisitor.h \
+  ../print_visitor.h \
   ../codegen.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/LLVMContext.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/DiagnosticHandler.h \
@@ -1296,7 +1296,78 @@ CMakeFiles/expr.dir/main.cc.o: ../main.cc \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/GraphTraits.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Intrinsics.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/IntrinsicEnums.inc \
-  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/ValueHandle.h
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/ValueHandle.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/ExecutionEngine.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/ExecutionEngine.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/Target.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/Targets.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/AsmPrinters.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/AsmParsers.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/Disassemblers.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/TargetMachine.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/JITSymbol.h \
+  /usr/include/c++/11/map \
+  /usr/include/c++/11/bits/stl_tree.h \
+  /usr/include/c++/11/bits/stl_map.h \
+  /usr/include/c++/11/bits/stl_multimap.h \
+  /usr/include/c++/11/set \
+  /usr/include/c++/11/bits/stl_set.h \
+  /usr/include/c++/11/bits/stl_multiset.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/FunctionExtras.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Error.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/Error.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Debug.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Format.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/Binary.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/Error.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/TargetParser/Triple.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/VersionTuple.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Mutex.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Threading.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/BitVector.h \
+  /usr/include/c++/11/ciso646 \
+  /usr/include/c++/11/mutex \
+  /usr/include/c++/11/chrono \
+  /usr/include/c++/11/ratio \
+  /usr/include/c++/11/ctime \
+  /usr/include/c++/11/bits/parse_numbers.h \
+  /usr/include/c++/11/bits/std_mutex.h \
+  /usr/include/c++/11/bits/unique_lock.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/TargetMachine.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/PassManager.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/TinyPtrVector.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/PassInstrumentation.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/Any.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/PassManagerInternal.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/TimeProfiler.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/TypeName.h \
+  /usr/include/c++/11/list \
+  /usr/include/c++/11/bits/stl_list.h \
+  /usr/include/c++/11/bits/list.tcc \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Allocator.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PGOOptions.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/IntrusiveRefCntPtr.h \
+  /usr/include/c++/11/atomic \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/CGPassBuilderOption.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/TargetOptions.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/MC/MCTargetOptions.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Compression.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/SectionMemoryManager.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/RTDyldMemoryManager.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/RuntimeDyld.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/DebugInfo/DIContext.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/ObjectFile.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Magic.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Swift.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Swift.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/SymbolicFile.h \
+  /usr/include/c++/11/cinttypes \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/WithColor.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Dwarf.def \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Memory.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Verifier.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/TargetSelect.h \
+  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/TargetMCAs.def
 
 CMakeFiles/expr.dir/parser.cc.o: ../parser.cc \
   /usr/include/stdc-predef.h \
@@ -1589,9 +1660,9 @@ CMakeFiles/expr.dir/parser.cc.o: ../parser.cc \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/MemAlloc.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h
 
-CMakeFiles/expr.dir/printVisitor.cc.o: ../printVisitor.cc \
+CMakeFiles/expr.dir/print_visitor.cc.o: ../print_visitor.cc \
   /usr/include/stdc-predef.h \
-  ../printVisitor.h \
+  ../print_visitor.h \
   ../ast.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_algobase.h \
@@ -2704,9 +2775,49 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 ../scope.cc:
 
-../printVisitor.cc:
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/WithColor.h:
 
-../printVisitor.h:
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Magic.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/DebugInfo/DIContext.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/RTDyldMemoryManager.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/SectionMemoryManager.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Compression.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/TargetOptions.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/CGPassBuilderOption.h:
+
+/usr/include/c++/11/atomic:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/IntrusiveRefCntPtr.h:
+
+/usr/include/c++/11/bits/parse_numbers.h:
+
+/usr/include/c++/11/ratio:
+
+/usr/include/c++/11/mutex:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Mutex.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/VersionTuple.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/TargetParser/Triple.h:
+
+/usr/include/c++/11/bits/stl_set.h:
+
+/usr/include/c++/11/set:
+
+/usr/include/c++/11/bits/stl_multimap.h:
+
+/usr/include/c++/11/bits/stl_tree.h:
+
+/usr/include/c++/11/map:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/ExecutionEngine.h:
 
 ../main.cc:
 
@@ -2728,11 +2839,15 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Verifier.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Dwarf.def:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/CFG.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Instructions.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/MapVector.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/Target.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Operator.h:
 
@@ -2743,6 +2858,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/InstrTypes.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/IRBuilder.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/TargetMCAs.def:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/GlobalVariable.h:
 
@@ -2762,9 +2879,13 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/simple_ilist.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/Binary.h:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/ilist.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/BasicBlock.h:
+
+/usr/include/c++/11/bits/stl_map.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/IntrinsicEnums.inc:
 
@@ -2784,6 +2905,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/DerivedTypes.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/RuntimeDyld.h:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/DataLayout.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/PassInstrumentation.h:
@@ -2793,6 +2916,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/EpochTracker.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Comdat.h:
+
+/usr/include/c++/11/bits/stl_multiset.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Attributes.inc:
 
@@ -2813,6 +2938,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Instruction.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/StringMapEntry.h:
+
+/usr/include/c++/11/ctime:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/StringMap.h:
 
@@ -2842,11 +2969,15 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/AlignOf.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/Targets.def:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/ErrorOr.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Instruction.def:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/Twine.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Threading.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/ValueHandle.h:
 
@@ -2864,9 +2995,15 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/ext/concurrence.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/AsmPrinters.def:
+
 /usr/include/x86_64-linux-gnu/c++/11/bits/gthr-default.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Allocator.h:
+
 /usr/include/c++/11/pstl/pstl_config.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/TargetMachine.h:
 
 /usr/include/c++/11/bits/allocator.h:
 
@@ -2886,9 +3023,13 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/bits/stl_pair.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/JITSymbol.h:
+
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
 
 /usr/include/time.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/SymbolicFile.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Value.def:
 
@@ -2954,6 +3095,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/bits/stl_algobase.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/Disassemblers.def:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/DiagnosticHandler.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/stdint.h:
@@ -2997,6 +3140,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /usr/include/x86_64-linux-gnu/c++/11/bits/os_defines.h:
 
 /usr/include/c++/11/bits/exception_defines.h:
+
+../print_visitor.h:
 
 /usr/include/c++/11/bit:
 
@@ -3054,6 +3199,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/exception:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/BitVector.h:
+
 ../ast.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Type.h:
@@ -3070,6 +3217,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/gthr.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/MC/MCTargetOptions.h:
+
 /usr/include/c++/11/bits/functexcept.h:
 
 /usr/include/c++/11/streambuf:
@@ -3083,6 +3232,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/LLVMContext.h:
 
 /usr/include/c++/11/array:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Swift.h:
 
 /usr/include/c++/11/new:
 
@@ -3138,19 +3289,29 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/ext/new_allocator.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/BinaryFormat/Swift.def:
+
 /usr/include/errno.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/type_traits.h:
 
 /usr/include/c++/11/ext/numeric_traits.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/ObjectFile.h:
+
 /usr/include/c++/11/bits/atomic_base.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/TargetSelect.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/DebugLoc.h:
 
 /usr/include/features.h:
 
+/usr/include/c++/11/bits/unique_lock.h:
+
 /usr/include/c++/11/bits/uses_allocator.h:
+
+/usr/include/c++/11/chrono:
 
 /usr/include/x86_64-linux-gnu/bits/wordsize.h:
 
@@ -3220,7 +3381,11 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/typeinfo:
 
+/usr/include/c++/11/cinttypes:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Casting.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Object/Error.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/PassManager.h:
 
@@ -3263,6 +3428,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /usr/include/locale.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm-c/Types.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Config/AsmParsers.def:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/ProfileSummary.h:
 
@@ -3317,6 +3484,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /usr/include/c++/11/string:
 
 /usr/include/c++/11/bits/char_traits.h:
+
+/usr/include/c++/11/ciso646:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/SmallPtrSet.h:
 
@@ -3378,7 +3547,11 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/bits/basic_string.tcc:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Target/TargetMachine.h:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/STLForwardCompat.h:
+
+../print_visitor.cc:
 
 /usr/include/c++/11/bits/locale_classes.tcc:
 
@@ -3414,6 +3587,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /usr/include/c++/11/bits/stl_algo.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PGOOptions.h:
+
 /usr/include/c++/11/cassert:
 
 /usr/include/c++/11/pstl/execution_defs.h:
@@ -3436,6 +3611,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/STLFunctionalExtras.h:
 
+/usr/include/c++/11/bits/std_mutex.h:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/identity.h:
 
 /usr/include/c++/11/bits/ptr_traits.h:
@@ -3454,6 +3631,8 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/DenseMapInfo.h:
 
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ExecutionEngine/ExecutionEngine.h:
+
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/IR/Use.h:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/CBindingWrapping.h:
@@ -3471,5 +3650,7 @@ CMakeFiles/expr.dir/type.cc.o: ../type.cc \
 /usr/include/c++/11/bits/stl_relops.h:
 
 /usr/include/limits.h:
+
+/home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/Memory.h:
 
 /usr/include/x86_64-linux-gnu/bits/posix1_lim.h:

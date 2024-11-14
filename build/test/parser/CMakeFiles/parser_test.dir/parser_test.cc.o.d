@@ -346,4 +346,4 @@ test/parser/CMakeFiles/parser_test.dir/parser_test.cc.o: \
  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/AllocatorBase.h \
  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/MemAlloc.h \
  /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h \
- /home/ace/llvm_project_1706/subc/./printVisitor.h
+ /home/ace/llvm_project_1706/subc/./print_visitor.h

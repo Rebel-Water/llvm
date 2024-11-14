@@ -24,8 +24,15 @@ public:
     std::shared_ptr<AstNode> SemaPostDecExprNode( std::shared_ptr<AstNode> left, Token tok);
     std::shared_ptr<AstNode> SemaPostSubscriptNode(std::shared_ptr<AstNode> left, std::shared_ptr<AstNode> node, Token tok);
 
+    std::shared_ptr<AstNode> SemaPostMemberDotNode(std::shared_ptr<AstNode> left, Token iden, Token dotTok);
+    std::shared_ptr<AstNode> SemaPostMemberArrowNode(std::shared_ptr<AstNode> left, Token iden, Token arrowTok);
+
     std::shared_ptr<VariableDecl::InitValue> SemaDeclInitValue(std::shared_ptr<CType> declType, std::shared_ptr<AstNode> value, std::vector<int> &offsetList, Token tok);
     std::shared_ptr<AstNode> SemaIfStmtNode(std::shared_ptr<AstNode> condNode, std::shared_ptr<AstNode> thenNode, std::shared_ptr<AstNode> elseNode);
+
+    std::shared_ptr<CType> SemaTagAccess(Token tok);
+    std::shared_ptr<CType> SemaTagDecl(Token tok, const std::vector<Member> &members, TagKind tagKind);
+    std::shared_ptr<CType> SemaAnonyTagDecl(const std::vector<Member> &members, TagKind tagKind);
 
     void EnterScope();
     void ExitScope();

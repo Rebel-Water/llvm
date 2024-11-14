@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "lexer.h"
 #include "parser.h"
-#include "printVisitor.h"
+#include "print_visitor.h"
 
 bool TestParserWithContent(llvm::StringRef content, llvm::StringRef expect) {
     llvm::ErrorOr<std::unique_ptr<llvm::MemoryBuffer>> buf = llvm::MemoryBuffer::getMemBuffer(content, "stdin");
@@ -155,7 +155,7 @@ TEST(ParserTest, unary_op) {
     ASSERT_EQ(res, true);
 }
 
-TEST(ParserTest, three_op) {
+TEST(ParserTest, tree_op) {
     bool res = TestParserWithContent("{int a=3;a>=3?a=5:-5;}", "{int a=3;a>=3?a=5:-5;}");
     ASSERT_EQ(res, true);
 }
@@ -228,5 +228,10 @@ TEST(ParserTest, post_arr_1) {
 
 TEST(ParserTest, arr_init1) {
     bool res = TestParserWithContent("{int a[3]={1,2}; a[0] = 4;}", "{[3]int a=1,2;a[0]=4;}");
+    ASSERT_EQ(res, true);
+}
+
+TEST(ParserTest, struct_1) {
+    bool res = TestParserWithContent("{struct A{int a,b; int *p;}; struct A a; 1;}", "{struct A{int a;int b;int *p;} a;1;}");
     ASSERT_EQ(res, true);
 }

@@ -4,7 +4,8 @@
 #include <memory>
 
 enum class SymbolKind {
-    LocalVariable
+    obj, /// var, func
+    tag  /// struct/union
 };
 
 class Symbol {
@@ -21,7 +22,8 @@ public:
 class Env{
 public:
     /// 符号信息
-    llvm::StringMap<std::shared_ptr<Symbol>> variableSymbolTable;
+    llvm::StringMap<std::shared_ptr<Symbol>> objSymbolTable;
+    llvm::StringMap<std::shared_ptr<Symbol>> tagSymbolTable;
 };
 
 class Scope {
@@ -31,7 +33,11 @@ public:
     Scope();
     void EnterScope();
     void ExitScope();
-    std::shared_ptr<Symbol> FindVarSymbol(llvm::StringRef name);
-    std::shared_ptr<Symbol> FindVarSymbolInCurEnv(llvm::StringRef name);
-    void AddSymbol(SymbolKind kind, std::shared_ptr<CType> ty, llvm::StringRef name);
+    std::shared_ptr<Symbol> FindObjSymbol(llvm::StringRef name);
+    std::shared_ptr<Symbol> FindObjSymbolInCurEnv(llvm::StringRef name);
+    void AddObjSymbol(std::shared_ptr<CType> ty, llvm::StringRef name);
+
+    std::shared_ptr<Symbol> FindTagSymbol(llvm::StringRef name);
+    std::shared_ptr<Symbol> FindTagSymbolInCurEnv(llvm::StringRef name);
+    void AddTagSymbol(std::shared_ptr<CType> ty, llvm::StringRef name);
 };

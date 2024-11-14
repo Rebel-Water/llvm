@@ -2,14 +2,17 @@
 #include "lexer.h"
 #include "ast.h"
 #include "sema.h"
-class Parser {
+class Parser
+{
 private:
     Lexer &lexer;
     Sema &sema;
     std::vector<std::shared_ptr<AstNode>> breakNodes;
     std::vector<std::shared_ptr<AstNode>> continueNodes;
+
 public:
-    Parser(Lexer &lexer, Sema &sema) : lexer(lexer), sema(sema) {
+    Parser(Lexer &lexer, Sema &sema) : lexer(lexer), sema(sema)
+    {
         Advance();
     }
 
@@ -20,6 +23,7 @@ private:
     std::shared_ptr<AstNode> ParseBlockStmt();
     std::shared_ptr<AstNode> ParseDeclStmt();
     std::shared_ptr<CType> ParseDeclSpec();
+    std::shared_ptr<CType> ParseStructOrUnionSpec();
     std::shared_ptr<AstNode> Declarator(std::shared_ptr<CType> baseType);
     std::shared_ptr<AstNode> DirectDeclarator(std::shared_ptr<CType> baseType);
     std::shared_ptr<CType> DirectDeclaratorSuffix(std::shared_ptr<CType> baseType);
@@ -65,7 +69,8 @@ private:
     /// 前进一个 token
     void Advance();
 
-    DiagEngine &GetDiagEngine() {
+    DiagEngine &GetDiagEngine()
+    {
         return lexer.GetDiagEngine();
     }
 

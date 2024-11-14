@@ -139,19 +139,19 @@ test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser_test.dir/__/__/parser.cc.s"
 	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/parser.cc -o CMakeFiles/parser_test.dir/__/__/parser.cc.s
 
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o: test/parser/CMakeFiles/parser_test.dir/flags.make
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o: ../printVisitor.cc
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o: test/parser/CMakeFiles/parser_test.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o"
-	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o -MF CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o.d -o CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o -c /home/ace/llvm_project_1706/subc/printVisitor.cc
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o: test/parser/CMakeFiles/parser_test.dir/flags.make
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o: ../print_visitor.cc
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o: test/parser/CMakeFiles/parser_test.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o"
+	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o -MF CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o.d -o CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o -c /home/ace/llvm_project_1706/subc/print_visitor.cc
 
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser_test.dir/__/__/printVisitor.cc.i"
-	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ace/llvm_project_1706/subc/printVisitor.cc > CMakeFiles/parser_test.dir/__/__/printVisitor.cc.i
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/parser_test.dir/__/__/print_visitor.cc.i"
+	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ace/llvm_project_1706/subc/print_visitor.cc > CMakeFiles/parser_test.dir/__/__/print_visitor.cc.i
 
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser_test.dir/__/__/printVisitor.cc.s"
-	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/printVisitor.cc -o CMakeFiles/parser_test.dir/__/__/printVisitor.cc.s
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/parser_test.dir/__/__/print_visitor.cc.s"
+	cd /home/ace/llvm_project_1706/subc/build/test/parser && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/print_visitor.cc -o CMakeFiles/parser_test.dir/__/__/print_visitor.cc.s
 
 test/parser/CMakeFiles/parser_test.dir/__/__/sema.cc.o: test/parser/CMakeFiles/parser_test.dir/flags.make
 test/parser/CMakeFiles/parser_test.dir/__/__/sema.cc.o: ../sema.cc
@@ -188,7 +188,7 @@ parser_test_OBJECTS = \
 "CMakeFiles/parser_test.dir/__/__/type.cc.o" \
 "CMakeFiles/parser_test.dir/__/__/diag_engine.cc.o" \
 "CMakeFiles/parser_test.dir/__/__/parser.cc.o" \
-"CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o" \
+"CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o" \
 "CMakeFiles/parser_test.dir/__/__/sema.cc.o" \
 "CMakeFiles/parser_test.dir/__/__/scope.cc.o"
 
@@ -200,7 +200,7 @@ test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/lexer.
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/type.cc.o
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/diag_engine.cc.o
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.o
-test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o
+test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/sema.cc.o
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/__/__/scope.cc.o
 test/parser/bin/parser_test: test/parser/CMakeFiles/parser_test.dir/build.make

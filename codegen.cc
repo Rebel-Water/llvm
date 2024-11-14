@@ -31,18 +31,18 @@ llvm::Value * CodeGen::VisitProgram(Program *p) {
 
     llvm::Value *lastVal = nullptr;
     lastVal = p->node->Accept(this);
-    if (lastVal)
-        irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("expr val: %d\n"), lastVal});
-    else 
-        irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("last inst is not expr!!!")});
+    // if (lastVal)
+    //     irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("expr val: %d\n"), lastVal});
+    // else 
+    //     irBuilder.CreateCall(printFunc, {irBuilder.CreateGlobalStringPtr("last inst is not expr!!!")});
 
     /// 返回指令
     llvm::Value *ret = irBuilder.CreateRet(lastVal);
     verifyFunction(*mFunc);
 
-    //if (verifyModule(*module, &llvm::outs())) {
+    if (verifyModule(*module, &llvm::outs())) {
         module->print(llvm::outs(), nullptr);
-    //}
+    }
     return ret;
 }
 
@@ -53,10 +53,9 @@ llvm::Value * CodeGen::VisitBinaryExpr(BinaryExpr *binaryExpr) {
         left = binaryExpr->left->Accept(this);
         right = binaryExpr->right->Accept(this);
     }
-
     switch (binaryExpr->op)
     {
-    case BinaryOp::add: { // current int* p = &a; 3 + p; is not right
+    case BinaryOp::add: {
         llvm::Type *ty = binaryExpr->left->ty->Accept(this);
         if (ty->isPointerTy()) {
             llvm::Value *newVal = irBuilder.CreateInBoundsGEP(ty, left, {right});
@@ -420,7 +419,10 @@ llvm::Value * CodeGen::VisitBreakStmt(BreakStmt *p) {
 llvm::Value * CodeGen::VisitVariableDecl(VariableDecl *decl) {
     llvm::Type *ty = decl->ty->Accept(this);
     llvm::StringRef text(decl->tok.ptr, decl->tok.len);
-    llvm::Value *value = irBuilder.CreateAlloca(ty, nullptr, text);
+
+    /// 要放入到entry bb里面
+    llvm::IRBuilder<> tmp(&curFunc->getEntryBlock(), curFunc->getEntryBlock().begin());
+    llvm::Value *value = tmp.CreateAlloca(ty, nullptr, text);
     varAddrTypeMap.insert({text, {value, ty}});
 
     if (decl->initValues.size() > 0) {
@@ -434,11 +436,36 @@ llvm::Value * CodeGen::VisitVariableDecl(VariableDecl *decl) {
                     for (auto &offset : initValue->offsetList) {
                         vec.push_back(irBuilder.getInt32(offset));
                     }
-                    llvm::Value *addr = irBuilder.CreateInBoundsGEP(arrType->getElementType(),value, vec);
+                    llvm::Value *addr = irBuilder.CreateInBoundsGEP(ty,value, vec);
                     llvm::Value *v = initValue->value->Accept(this);
                     irBuilder.CreateStore(v, addr);
                 }
-            }else {
+            }else if (llvm::StructType *structType = llvm::dyn_cast<llvm::StructType>(ty)) {
+                CRecordType *cStructType = llvm::dyn_cast<CRecordType>(decl->ty.get());
+                TagKind tagKind = cStructType->GetTagKind();
+                if (tagKind == TagKind::kStruct) {
+                    for (const auto &initValue : decl->initValues) {
+                        llvm::SmallVector<llvm::Value *> vec;
+                        for (auto &offset : initValue->offsetList) {
+                            vec.push_back(irBuilder.getInt32(offset));
+                        }
+                        llvm::Value *addr = irBuilder.CreateInBoundsGEP(ty, value, vec);
+                        llvm::Value *v = initValue->value->Accept(this);
+                        irBuilder.CreateStore(v, addr);
+                    }
+                }else {
+                    assert(decl->initValues.size() == 1);
+                    llvm::SmallVector<llvm::Value *> vec;
+                    const auto &initValue = decl->initValues[0];
+                    for (auto &offset : initValue->offsetList) {
+                        vec.push_back(irBuilder.getInt32(offset));
+                    }
+                    llvm::Value *addr = irBuilder.CreateInBoundsGEP(ty, value, vec);
+                    llvm::Value *v = initValue->value->Accept(this);
+                    irBuilder.CreateStore(v, addr);
+                }
+            }
+            else {
                 assert(0);
             }
         }
@@ -571,6 +598,53 @@ llvm::Value * CodeGen::VisitPostSubscript(PostSubscript *expr) {
     return irBuilder.CreateLoad(ty, addr);
 }
 
+/// a.b 
+/// a -> T
+llvm::Value * CodeGen::VisitPostMemberDotExpr(PostMemberDotExpr *expr) {
+    llvm::Value *leftValue = expr->left->Accept(this);
+    llvm::Type *leftType = expr->left->ty->Accept(this);
+
+    CRecordType *cLeftType = llvm::dyn_cast<CRecordType>(expr->left->ty.get());
+    TagKind kind = cLeftType->GetTagKind();
+
+    llvm::Type *memType = expr->member.ty->Accept(this);
+
+    llvm::Value *zero = irBuilder.getInt32(0);
+    if (kind == TagKind::kStruct) {
+        llvm::Value *next = irBuilder.getInt32(expr->member.elemIdx);
+        llvm::Value *memAddr = irBuilder.CreateInBoundsGEP(leftType, llvm::dyn_cast<LoadInst>(leftValue)->getPointerOperand(), {zero, next});
+        return irBuilder.CreateLoad(memType, memAddr);
+    }else {
+        llvm::Value *memAddr = irBuilder.CreateInBoundsGEP(leftType, llvm::dyn_cast<LoadInst>(leftValue)->getPointerOperand(), {zero, zero});
+        llvm::Value *cast = irBuilder.CreateBitCast(memAddr, llvm::PointerType::getUnqual(memType));
+        return irBuilder.CreateLoad(memType, cast);
+    }
+}
+
+/// a->b
+/// ptr* -> ptr
+llvm::Value * CodeGen::VisitPostMemberArrowExpr(PostMemberArrowExpr *expr) {
+    llvm::Value *leftValue = expr->left->Accept(this);
+    llvm::Type *leftType = expr->left->ty->Accept(this);
+    CPointType *cLeftPointerType = llvm::dyn_cast<CPointType>(expr->left->ty.get());
+    
+    CRecordType *cLeftType = llvm::dyn_cast<CRecordType>(cLeftPointerType->GetBaseType().get());
+    TagKind kind = cLeftType->GetTagKind();
+
+    llvm::Type *memType = expr->member.ty->Accept(this);
+
+    llvm::Value *zero = irBuilder.getInt32(0);
+    if (kind == TagKind::kStruct) {
+        llvm::Value *next = irBuilder.getInt32(expr->member.elemIdx);
+        llvm::Value *memAddr = irBuilder.CreateInBoundsGEP(cLeftPointerType->GetBaseType()->Accept(this), leftValue, {zero, next});
+        return irBuilder.CreateLoad(memType, memAddr);
+    }else {
+        llvm::Value *memAddr = irBuilder.CreateInBoundsGEP(cLeftPointerType->GetBaseType()->Accept(this), leftValue, {zero, zero});
+        llvm::Value *cast = irBuilder.CreateBitCast(memAddr, llvm::PointerType::getUnqual(memType));
+        return irBuilder.CreateLoad(memType, cast);
+    }
+}
+
 llvm::Value * CodeGen::VisitThreeExpr(ThreeExpr *expr) {
     llvm::Value *val = expr->cond->Accept(this);
     llvm::Value *cond = irBuilder.CreateICmpNE(val, irBuilder.getInt32(0));
@@ -600,7 +674,8 @@ llvm::Value * CodeGen::VisitThreeExpr(ThreeExpr *expr) {
     return phi;
 }
 
-
+/// alloc T -> T *
+/// load T* -> T
 llvm::Value * CodeGen::VisitVariableAccessExpr(VariableAccessExpr *expr) {
     llvm::StringRef text(expr->tok.ptr, expr->tok.len);
     std::pair pair = varAddrTypeMap[text];
@@ -624,5 +699,32 @@ llvm::Type * CodeGen::VisitPointType(CPointType *ty) {
 
 llvm::Type * CodeGen::VisitArrayType(CArrayType *ty) {
     llvm::Type *elementType = ty->GetElementType()->Accept(this);
-    return llvm::ArrayType::get(elementType, ty->GetElement());
+    return llvm::ArrayType::get(elementType, ty->GetElementCount());
+}
+
+llvm::Type * CodeGen::VisitRecordType(CRecordType *ty) {
+    llvm::StructType *structType = nullptr;
+    structType = llvm::StructType::getTypeByName(context, ty->GetName());
+    if (structType) {
+        return structType;
+    }
+    structType = llvm::StructType::create(context, ty->GetName());
+    // structType->setName(ty->GetName());
+
+    TagKind tagKind = ty->GetTagKind();
+
+    if (tagKind == TagKind::kStruct) {
+        llvm::SmallVector<llvm::Type *> vec;
+        for (const auto &m : ty->GetMembers()) {
+            vec.push_back(m.ty->Accept(this));
+        }
+        structType->setBody(vec);
+    }else {
+        llvm::SmallVector<llvm::Type *> vec;
+        const auto &members = ty->GetMembers();
+        int idx = ty->GetMaxElementIdx();
+        structType->setBody(members[idx].ty->Accept(this));
+    }
+    // structType->print(llvm::outs());
+    return structType;
 }

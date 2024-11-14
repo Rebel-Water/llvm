@@ -247,29 +247,29 @@ __/__/parser.cc.s:
 	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.s
 .PHONY : __/__/parser.cc.s
 
-__/__/printVisitor.o: __/__/printVisitor.cc.o
-.PHONY : __/__/printVisitor.o
+__/__/print_visitor.o: __/__/print_visitor.cc.o
+.PHONY : __/__/print_visitor.o
 
 # target to build an object file
-__/__/printVisitor.cc.o:
-	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o
-.PHONY : __/__/printVisitor.cc.o
+__/__/print_visitor.cc.o:
+	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o
+.PHONY : __/__/print_visitor.cc.o
 
-__/__/printVisitor.i: __/__/printVisitor.cc.i
-.PHONY : __/__/printVisitor.i
+__/__/print_visitor.i: __/__/print_visitor.cc.i
+.PHONY : __/__/print_visitor.i
 
 # target to preprocess a source file
-__/__/printVisitor.cc.i:
-	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.i
-.PHONY : __/__/printVisitor.cc.i
+__/__/print_visitor.cc.i:
+	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.i
+.PHONY : __/__/print_visitor.cc.i
 
-__/__/printVisitor.s: __/__/printVisitor.cc.s
-.PHONY : __/__/printVisitor.s
+__/__/print_visitor.s: __/__/print_visitor.cc.s
+.PHONY : __/__/print_visitor.s
 
 # target to generate assembly for a file
-__/__/printVisitor.cc.s:
-	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.s
-.PHONY : __/__/printVisitor.cc.s
+__/__/print_visitor.cc.s:
+	cd /home/ace/llvm_project_1706/subc/build && $(MAKE) $(MAKESILENT) -f test/parser/CMakeFiles/parser_test.dir/build.make test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.s
+.PHONY : __/__/print_visitor.cc.s
 
 __/__/scope.o: __/__/scope.cc.o
 .PHONY : __/__/scope.o
@@ -389,9 +389,9 @@ help:
 	@echo "... __/__/parser.o"
 	@echo "... __/__/parser.i"
 	@echo "... __/__/parser.s"
-	@echo "... __/__/printVisitor.o"
-	@echo "... __/__/printVisitor.i"
-	@echo "... __/__/printVisitor.s"
+	@echo "... __/__/print_visitor.o"
+	@echo "... __/__/print_visitor.i"
+	@echo "... __/__/print_visitor.s"
 	@echo "... __/__/scope.o"
 	@echo "... __/__/scope.i"
 	@echo "... __/__/scope.s"

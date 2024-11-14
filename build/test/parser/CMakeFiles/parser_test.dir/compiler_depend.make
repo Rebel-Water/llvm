@@ -846,9 +846,9 @@ test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.o: ../parser.cc \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/MemAlloc.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h
 
-test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o: ../printVisitor.cc \
+test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o: ../print_visitor.cc \
   /usr/include/stdc-predef.h \
-  ../printVisitor.h \
+  ../print_visitor.h \
   ../ast.h \
   /usr/include/c++/11/memory \
   /usr/include/c++/11/bits/stl_algobase.h \
@@ -2367,7 +2367,7 @@ test/parser/CMakeFiles/parser_test.dir/parser_test.cc.o: ../test/parser/parser_t
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/AllocatorBase.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/MemAlloc.h \
   /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h \
-  ../printVisitor.h
+  ../print_visitor.h
 
 
 _deps/googletest-src/googletest/include/gtest/gtest_prod.h:
@@ -2496,6 +2496,8 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-port.h:
 
 /usr/include/c++/11/sstream:
 
+_deps/googletest-src/googletest/include/gtest/gtest-assertion-result.h:
+
 _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h:
 
 /usr/include/c++/11/bits/ostream.tcc:
@@ -2519,12 +2521,6 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-type-util.h:
 ../sema.cc:
 
 ../scope.cc:
-
-_deps/googletest-src/googletest/include/gtest/gtest-assertion-result.h:
-
-../printVisitor.h:
-
-../printVisitor.cc:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/Support/PointerLikeTypeTraits.h:
 
@@ -2609,6 +2605,8 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-string.h:
 /usr/include/assert.h:
 
 /usr/include/c++/11/cstdlib:
+
+../print_visitor.h:
 
 /usr/include/c++/11/bit:
 
@@ -3117,6 +3115,8 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-death-test-internal
 /usr/include/c++/11/bits/basic_string.tcc:
 
 /home/ace/llvm_project_1706/llvm_install_dir/include/llvm/ADT/STLForwardCompat.h:
+
+../print_visitor.cc:
 
 /usr/include/c++/11/bits/locale_classes.tcc:
 

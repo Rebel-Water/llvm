@@ -9,23 +9,46 @@ void Scope::EnterScope() {
 void Scope::ExitScope() {
     envs.pop_back();
 }
-std::shared_ptr<Symbol> Scope::FindVarSymbol(llvm::StringRef name) {
+std::shared_ptr<Symbol> Scope::FindObjSymbol(llvm::StringRef name) {
     for (auto it = envs.rbegin(); it != envs.rend(); ++it) {
-        auto &table = (*it)->variableSymbolTable;
+        auto &table = (*it)->objSymbolTable;
         if (table.count(name) > 0) {
             return table[name];
         }
     }
     return nullptr;
 }
-std::shared_ptr<Symbol> Scope::FindVarSymbolInCurEnv(llvm::StringRef name) {
-    auto &table = envs.back()->variableSymbolTable;
+std::shared_ptr<Symbol> Scope::FindObjSymbolInCurEnv(llvm::StringRef name) {
+    auto &table = envs.back()->objSymbolTable;
     if (table.count(name) > 0) {
         return table[name];
     }
     return nullptr;
 }
-void Scope::AddSymbol(SymbolKind kind, std::shared_ptr<CType> ty, llvm::StringRef name) {
-    auto symbol = std::make_shared<Symbol>(kind, ty, name);
-    envs.back()->variableSymbolTable.insert({name, symbol});
+void Scope::AddObjSymbol(std::shared_ptr<CType> ty, llvm::StringRef name) {
+    auto symbol = std::make_shared<Symbol>(SymbolKind::obj, ty, name);
+    envs.back()->objSymbolTable.insert({name, symbol});
+}
+
+std::shared_ptr<Symbol> Scope::FindTagSymbol(llvm::StringRef name) {
+    for (auto it = envs.rbegin(); it != envs.rend(); ++it) {
+        auto &table = (*it)->tagSymbolTable;
+        if (table.count(name) > 0) {
+            return table[name];
+        }
+    }
+    return nullptr;
+}
+
+std::shared_ptr<Symbol> Scope::FindTagSymbolInCurEnv(llvm::StringRef name) {
+    auto &table = envs.back()->tagSymbolTable;
+    if (table.count(name) > 0) {
+        return table[name];
+    }
+    return nullptr;
+}
+
+void Scope::AddTagSymbol(std::shared_ptr<CType> ty, llvm::StringRef name) {
+    auto symbol = std::make_shared<Symbol>(SymbolKind::tag, ty, name);
+    envs.back()->tagSymbolTable.insert({name, symbol});
 }

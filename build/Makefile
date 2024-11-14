@@ -437,29 +437,29 @@ parser.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/parser.cc.s
 .PHONY : parser.cc.s
 
-printVisitor.o: printVisitor.cc.o
-.PHONY : printVisitor.o
+print_visitor.o: print_visitor.cc.o
+.PHONY : print_visitor.o
 
 # target to build an object file
-printVisitor.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cc.o
-.PHONY : printVisitor.cc.o
+print_visitor.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/print_visitor.cc.o
+.PHONY : print_visitor.cc.o
 
-printVisitor.i: printVisitor.cc.i
-.PHONY : printVisitor.i
+print_visitor.i: print_visitor.cc.i
+.PHONY : print_visitor.i
 
 # target to preprocess a source file
-printVisitor.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cc.i
-.PHONY : printVisitor.cc.i
+print_visitor.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/print_visitor.cc.i
+.PHONY : print_visitor.cc.i
 
-printVisitor.s: printVisitor.cc.s
-.PHONY : printVisitor.s
+print_visitor.s: print_visitor.cc.s
+.PHONY : print_visitor.s
 
 # target to generate assembly for a file
-printVisitor.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/printVisitor.cc.s
-.PHONY : printVisitor.cc.s
+print_visitor.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/expr.dir/build.make CMakeFiles/expr.dir/print_visitor.cc.s
+.PHONY : print_visitor.cc.s
 
 scope.o: scope.cc.o
 .PHONY : scope.o
@@ -572,9 +572,9 @@ help:
 	@echo "... parser.o"
 	@echo "... parser.i"
 	@echo "... parser.s"
-	@echo "... printVisitor.o"
-	@echo "... printVisitor.i"
-	@echo "... printVisitor.s"
+	@echo "... print_visitor.o"
+	@echo "... print_visitor.i"
+	@echo "... print_visitor.s"
 	@echo "... scope.o"
 	@echo "... scope.i"
 	@echo "... scope.s"

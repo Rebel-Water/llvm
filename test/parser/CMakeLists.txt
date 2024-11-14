@@ -8,7 +8,7 @@ add_executable(
   ../../type.cc 
   ../../diag_engine.cc
   ../../parser.cc 
-  ../../printVisitor.cc
+  ../../print_visitor.cc
   ../../sema.cc 
   ../../scope.cc
 )

@@ -32,13 +32,16 @@ private:
     llvm::Value * VisitSizeOfExpr(SizeOfExpr *expr) override;
     llvm::Value * VisitPostIncExpr(PostIncExpr *expr) override;
     llvm::Value * VisitPostDecExpr(PostDecExpr *expr) override;
+    llvm::Value * VisitPostSubscript(PostSubscript *expr) override;
+    llvm::Value * VisitPostMemberDotExpr(PostMemberDotExpr *expr) override;
+    llvm::Value * VisitPostMemberArrowExpr(PostMemberArrowExpr *expr) override;
     llvm::Value * VisitThreeExpr(ThreeExpr *expr) override;
     llvm::Value * VisitVariableAccessExpr(VariableAccessExpr *factorExpr) override;
-    llvm::Value * VisitPostSubscript(PostSubscript* postSubscript) override;
 
     llvm::Type * VisitPrimaryType(CPrimaryType *ty) override;
     llvm::Type * VisitPointType(CPointType *ty) override;
-    llvm::Type * VisitArrayType(CArrayType* ty) override;
+    llvm::Type * VisitArrayType(CArrayType *ty) override;
+    llvm::Type * VisitRecordType(CRecordType *ty) override;
 
 private:
     llvm::LLVMContext context;

@@ -5,13 +5,20 @@
 class CPrimaryType;
 class CPointType;
 class CArrayType;
+class CRecordType;
 
 class TypeVisitor {
 public:
     virtual ~TypeVisitor() {}
     virtual llvm::Type * VisitPrimaryType(CPrimaryType *ty) = 0;
     virtual llvm::Type * VisitPointType(CPointType *ty) = 0;
-    virtual llvm::Type * VisitArrayType(CArrayType*ty) = 0;
+    virtual llvm::Type * VisitArrayType(CArrayType *ty) = 0;
+    virtual llvm::Type * VisitRecordType(CRecordType *ty) = 0;
+};
+
+enum class TagKind {
+    kStruct,
+    kUnion
 };
 
 class CType {
@@ -19,9 +26,10 @@ public:
     enum Kind {
         TY_Int,
         TY_Point,
-        TY_Array
+        TY_Array,
+        TY_Record,
     };
-private:
+protected:
     Kind kind;
     int size;       /// 字节数
     int align;      /// 对齐数
@@ -29,11 +37,17 @@ public:
     CType(Kind kind, int size, int align):kind(kind), size(size), align(align) {}
     virtual ~CType() {}
     const Kind GetKind() const {return kind;}
-    const int GetSize() const {return size;}
-    const int GetAlign() const {return align;}
+    const int GetSize() const {
+        return size;
+    }
+    const int GetAlign() const {
+        return align;
+    }
     virtual llvm::Type * Accept(TypeVisitor *v) {return nullptr;}
 
     static std::shared_ptr<CType> IntType;
+
+    static llvm::StringRef GenAnonyRecordName(TagKind tagKind);
 };
 
 class CPrimaryType : public CType {
@@ -69,27 +83,71 @@ public:
 };
 
 class CArrayType : public CType {
-    private:
+private:
     std::shared_ptr<CType> elementType;
     int elementCount;
-    public:
+public:
     CArrayType(std::shared_ptr<CType> elementType, int elementCount)
-        : CType(Kind::TY_Array, elementCount * elementType->GetSize(), elementType->GetAlign()), elementType(elementType), elementCount(elementCount) {}
+    :CType(Kind::TY_Array, elementCount * elementType->GetSize(), elementType->GetAlign()), elementType(elementType), elementCount(elementCount) {}
     
     std::shared_ptr<CType> GetElementType() {
         return elementType;
     }
 
-    const int GetElement() const {
+    const int GetElementCount() {
         return elementCount;
     }
 
-    llvm::Type* Accept(TypeVisitor* v) override {
+    llvm::Type * Accept(TypeVisitor *v) override {
         return v->VisitArrayType(this);
     }
 
-    static bool classof(const CType* ty) {
+    static bool classof(const CType *ty) {
         return ty->GetKind() == TY_Array;
     }
+};
 
+struct Member {
+    std::shared_ptr<CType> ty;
+    llvm::StringRef name;
+    int offset;
+    int elemIdx;
+};
+
+
+class CRecordType : public CType {
+private:
+    llvm::StringRef name;
+    std::vector<Member> members;
+    TagKind tagKind;
+    int maxElementIdx;
+public:
+    CRecordType(llvm::StringRef name, const std::vector<Member> &members, TagKind tagKind);
+
+    const llvm::StringRef GetName() {
+        return name;
+    }
+
+    const std::vector<Member> &GetMembers() {
+        return members;
+    }
+
+    const TagKind GetTagKind() {
+        return tagKind;
+    }
+
+    int GetMaxElementIdx() {
+        return maxElementIdx;
+    }
+
+    llvm::Type * Accept(TypeVisitor *v) override {
+        return v->VisitRecordType(this);
+    }
+
+    static bool classof(const CType *ty) {
+        return ty->GetKind() == TY_Record;
+    }
+private:
+    void UpdateStructOffset();
+    void UpdateUnionOffset();
 };

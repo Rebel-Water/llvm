@@ -111,19 +111,19 @@ CMakeFiles/expr.dir/parser.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/expr.dir/parser.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/parser.cc -o CMakeFiles/expr.dir/parser.cc.s
 
-CMakeFiles/expr.dir/printVisitor.cc.o: CMakeFiles/expr.dir/flags.make
-CMakeFiles/expr.dir/printVisitor.cc.o: ../printVisitor.cc
-CMakeFiles/expr.dir/printVisitor.cc.o: CMakeFiles/expr.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/expr.dir/printVisitor.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/expr.dir/printVisitor.cc.o -MF CMakeFiles/expr.dir/printVisitor.cc.o.d -o CMakeFiles/expr.dir/printVisitor.cc.o -c /home/ace/llvm_project_1706/subc/printVisitor.cc
+CMakeFiles/expr.dir/print_visitor.cc.o: CMakeFiles/expr.dir/flags.make
+CMakeFiles/expr.dir/print_visitor.cc.o: ../print_visitor.cc
+CMakeFiles/expr.dir/print_visitor.cc.o: CMakeFiles/expr.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/ace/llvm_project_1706/subc/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/expr.dir/print_visitor.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/expr.dir/print_visitor.cc.o -MF CMakeFiles/expr.dir/print_visitor.cc.o.d -o CMakeFiles/expr.dir/print_visitor.cc.o -c /home/ace/llvm_project_1706/subc/print_visitor.cc
 
-CMakeFiles/expr.dir/printVisitor.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/expr.dir/printVisitor.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ace/llvm_project_1706/subc/printVisitor.cc > CMakeFiles/expr.dir/printVisitor.cc.i
+CMakeFiles/expr.dir/print_visitor.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/expr.dir/print_visitor.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/ace/llvm_project_1706/subc/print_visitor.cc > CMakeFiles/expr.dir/print_visitor.cc.i
 
-CMakeFiles/expr.dir/printVisitor.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/expr.dir/printVisitor.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/printVisitor.cc -o CMakeFiles/expr.dir/printVisitor.cc.s
+CMakeFiles/expr.dir/print_visitor.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/expr.dir/print_visitor.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/ace/llvm_project_1706/subc/print_visitor.cc -o CMakeFiles/expr.dir/print_visitor.cc.s
 
 CMakeFiles/expr.dir/type.cc.o: CMakeFiles/expr.dir/flags.make
 CMakeFiles/expr.dir/type.cc.o: ../type.cc
@@ -200,7 +200,7 @@ expr_OBJECTS = \
 "CMakeFiles/expr.dir/main.cc.o" \
 "CMakeFiles/expr.dir/lexer.cc.o" \
 "CMakeFiles/expr.dir/parser.cc.o" \
-"CMakeFiles/expr.dir/printVisitor.cc.o" \
+"CMakeFiles/expr.dir/print_visitor.cc.o" \
 "CMakeFiles/expr.dir/type.cc.o" \
 "CMakeFiles/expr.dir/scope.cc.o" \
 "CMakeFiles/expr.dir/sema.cc.o" \
@@ -213,7 +213,7 @@ expr_EXTERNAL_OBJECTS =
 bin/expr: CMakeFiles/expr.dir/main.cc.o
 bin/expr: CMakeFiles/expr.dir/lexer.cc.o
 bin/expr: CMakeFiles/expr.dir/parser.cc.o
-bin/expr: CMakeFiles/expr.dir/printVisitor.cc.o
+bin/expr: CMakeFiles/expr.dir/print_visitor.cc.o
 bin/expr: CMakeFiles/expr.dir/type.cc.o
 bin/expr: CMakeFiles/expr.dir/scope.cc.o
 bin/expr: CMakeFiles/expr.dir/sema.cc.o

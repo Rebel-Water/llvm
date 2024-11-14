@@ -11,7 +11,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/ace/llvm_project_1706/subc/diag_engine.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/diag_engine.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/diag_engine.cc.o.d"
   "/home/ace/llvm_project_1706/subc/lexer.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/lexer.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/lexer.cc.o.d"
   "/home/ace/llvm_project_1706/subc/parser.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/parser.cc.o.d"
-  "/home/ace/llvm_project_1706/subc/printVisitor.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/printVisitor.cc.o.d"
+  "/home/ace/llvm_project_1706/subc/print_visitor.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/print_visitor.cc.o.d"
   "/home/ace/llvm_project_1706/subc/scope.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/scope.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/scope.cc.o.d"
   "/home/ace/llvm_project_1706/subc/sema.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/sema.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/sema.cc.o.d"
   "/home/ace/llvm_project_1706/subc/type.cc" "test/parser/CMakeFiles/parser_test.dir/__/__/type.cc.o" "gcc" "test/parser/CMakeFiles/parser_test.dir/__/__/type.cc.o.d"
