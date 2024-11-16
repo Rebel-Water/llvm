@@ -2,7 +2,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/Support/Casting.h"
 
-std::shared_ptr<AstNode> Sema::SemaVariableDeclNode(Token tok, std::shared_ptr<CType> ty) {
+std::shared_ptr<AstNode> Sema::SemaVariableDeclNode(Token tok, std::shared_ptr<CType> ty, bool isGlobal) {
     // 1. 检测是否出现重定义
     llvm::StringRef text(tok.ptr, tok.len);
     std::shared_ptr<Symbol> symbol = scope.FindObjSymbolInCurEnv(text);
@@ -19,6 +19,7 @@ std::shared_ptr<AstNode> Sema::SemaVariableDeclNode(Token tok, std::shared_ptr<C
     decl->tok = tok;
     decl->ty = ty;
     decl->isLValue = true;
+    decl->isGlobal = isGlobal;
     return decl;
 }
 
@@ -188,6 +189,7 @@ std::shared_ptr<AstNode> Sema::SemaPostMemberDotNode(std::shared_ptr<AstNode> le
         diagEngine.Report(llvm::SMLoc::getFromPointer(iden.ptr), diag::err_miss, "struct or union miss field");
     }
 
+    
     auto node = std::make_shared<PostMemberDotExpr>();
     node->tok = dotTok;
     node->ty = curMember.ty;
@@ -222,6 +224,7 @@ std::shared_ptr<AstNode> Sema::SemaPostMemberArrowNode(std::shared_ptr<AstNode> 
         diagEngine.Report(llvm::SMLoc::getFromPointer(iden.ptr), diag::err_miss, "struct or union miss field");
     }
 
+    
     auto node = std::make_shared<PostMemberArrowExpr>();
     node->tok = arrowTok;
     node->ty = curMember.ty;
@@ -288,6 +291,45 @@ std::shared_ptr<CType> Sema::SemaAnonyTagDecl(const std::vector<Member> &members
         scope.AddTagSymbol(recordTy, text);
     }
     return recordTy;
+}
+
+std::shared_ptr<AstNode> Sema::SemaFuncDecl(Token tok, std::shared_ptr<CType> type, std::shared_ptr<AstNode> blockStmt) {
+     // 1. 检测是否出现重定义
+    llvm::StringRef text(tok.ptr, tok.len);
+    std::shared_ptr<Symbol> symbol = scope.FindObjSymbolInCurEnv(text);
+    if (symbol && blockStmt && (mode == Mode::Normal)) {
+        diagEngine.Report(llvm::SMLoc::getFromPointer(tok.ptr), diag::err_redefined, text);
+    }
+
+    if (symbol == nullptr && (mode == Mode::Normal)) {
+        /// 2. 添加到符号表
+        scope.AddObjSymbol(type, text);
+    }
+
+    auto funcDecl = std::make_shared<FuncDecl>();
+    funcDecl->ty = type;
+    funcDecl->blockStmt = blockStmt;
+    funcDecl->tok = tok;
+    return funcDecl;
+}
+
+std::shared_ptr<AstNode> Sema::SemaFuncCall(std::shared_ptr<AstNode> left, const std::vector<std::shared_ptr<AstNode>> &args) {
+    Token iden = left->tok;
+    if (left->ty->GetKind() != CType::TY_Func) {
+        diagEngine.Report(llvm::SMLoc::getFromPointer(iden.ptr), diag::err_expected, "functype");
+    }
+
+    CFuncType *funcType = llvm::dyn_cast<CFuncType>(left->ty.get());
+    if (funcType->GetParams().size() != args.size()) {
+        diagEngine.Report(llvm::SMLoc::getFromPointer(iden.ptr), diag::err_miss, "arg count not match");
+    }
+
+    auto funcCall = std::make_shared<PostFuncCall>();
+    funcCall->ty = funcType->GetRetType();
+    funcCall->left = left;
+    funcCall->args = args;
+    funcCall->tok = left->tok;
+    return funcCall;
 }
 
 void Sema::EnterScope() {

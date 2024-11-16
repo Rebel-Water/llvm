@@ -63,6 +63,7 @@ enum class TokenType : uint8_t{
     kw_union,       // union
     dot,            // .
     arrow,          // ->
+    kw_return,      // return
     eof             // end
 };
 
@@ -89,6 +90,7 @@ class Lexer {
 private:
     llvm::SourceMgr &mgr;
     DiagEngine &diagEngine;
+    llvm::StringRef fileName;
 public:
     Lexer(llvm::SourceMgr &mgr, DiagEngine &diagEngine) : mgr(mgr), diagEngine(diagEngine) {
         unsigned id = mgr.getMainFileID();
@@ -97,6 +99,7 @@ public:
         LineHeadPtr = buf.begin();
         BufEnd = buf.end();
         row = 1;
+        fileName = mgr.getMemoryBuffer(id)->getBufferIdentifier();
     }
 
     void NextToken(Token &tok);
@@ -106,6 +109,10 @@ public:
 
     DiagEngine &GetDiagEngine() const {
         return diagEngine;
+    }
+
+    llvm::StringRef GetFileName() {
+        return fileName;
     }
 private:
     bool StartWith(const char *p);

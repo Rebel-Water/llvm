@@ -12,7 +12,7 @@ private:
     DiagEngine &diagEngine;
 public:
     Sema(DiagEngine &diagEngine):diagEngine(diagEngine) {}
-    std::shared_ptr<AstNode> SemaVariableDeclNode(Token tok, std::shared_ptr<CType> ty);
+    std::shared_ptr<AstNode> SemaVariableDeclNode(Token tok, std::shared_ptr<CType> ty, bool isGlobal);
     std::shared_ptr<AstNode> SemaVariableAccessNode(Token tok);
     std::shared_ptr<AstNode> SemaNumberExprNode(Token tok, std::shared_ptr<CType> ty);
     std::shared_ptr<AstNode> SemaBinaryExprNode( std::shared_ptr<AstNode> left,std::shared_ptr<AstNode> right, BinaryOp op);
@@ -33,6 +33,9 @@ public:
     std::shared_ptr<CType> SemaTagAccess(Token tok);
     std::shared_ptr<CType> SemaTagDecl(Token tok, const std::vector<Member> &members, TagKind tagKind);
     std::shared_ptr<CType> SemaAnonyTagDecl(const std::vector<Member> &members, TagKind tagKind);
+
+    std::shared_ptr<AstNode> SemaFuncDecl(Token tok, std::shared_ptr<CType> type, std::shared_ptr<AstNode> blockStmt);
+    std::shared_ptr<AstNode> SemaFuncCall(std::shared_ptr<AstNode> left, const std::vector<std::shared_ptr<AstNode>> &args);
 
     void EnterScope();
     void ExitScope();

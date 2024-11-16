@@ -115,6 +115,8 @@ llvm::StringRef Token::GetSpellingText(TokenType tokenType) {
         return ".";
     case TokenType::arrow:
         return "->";
+    case TokenType::kw_return:
+        return "return";
     default:
         llvm::llvm_unreachable_internal();
     }
@@ -215,6 +217,8 @@ void Lexer::NextToken(Token &tok) {
             tok.tokenType = TokenType::kw_struct;
         }else if (text == "union") {
             tok.tokenType = TokenType::kw_union;
+        }else if (text == "return") {
+            tok.tokenType = TokenType::kw_return;
         }
     }
     else {

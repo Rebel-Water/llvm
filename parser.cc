@@ -3,11 +3,33 @@
 std::shared_ptr<Program> Parser::ParseProgram() {
 
     auto program = std::make_shared<Program>();
-    if (tok.tokenType != TokenType::eof) {
-       program->node = ParseBlockStmt();
+    program->fileName = lexer.GetFileName();
+    while (tok.tokenType != TokenType::eof) {
+        if (IsFuncDecl()) {
+            program->externalDecls.push_back(ParseFuncDecl());
+        }else {
+            program->externalDecls.push_back(ParseDeclStmt(true));
+        }
     }
     Expect(TokenType::eof);
     return program;
+}
+
+std::shared_ptr<AstNode> Parser::ParseFuncDecl() {
+    auto baseType = ParseDeclSpec();
+
+    sema.EnterScope();
+    auto node = Declarator(baseType, true);
+
+    std::shared_ptr<AstNode> blockStmt = nullptr;
+    if (tok.tokenType != TokenType::semi) {
+        blockStmt = ParseBlockStmt();
+    }else {
+        Consume(TokenType::semi);
+    }
+    sema.ExitScope();
+
+    return sema.SemaFuncDecl(node->tok, node->ty, blockStmt);
 }
 
 std::shared_ptr<AstNode> Parser::ParseStmt() {
@@ -39,6 +61,9 @@ std::shared_ptr<AstNode> Parser::ParseStmt() {
     /// continue stmt
     else if (tok.tokenType == TokenType::kw_continue) {
         return ParseContinueStmt();
+    }
+    else if (tok.tokenType == TokenType::kw_return) {
+        return ParseReturnStmt();
     }
     /// expr stmt
     else {
@@ -131,7 +156,7 @@ std::shared_ptr<CType> Parser::ParseStructOrUnionSpec() {
 
 /// int a[3][4];
 /// baseType -> int
-std::shared_ptr<CType> Parser::DirectDeclaratorArraySuffix(std::shared_ptr<CType> baseType) {
+std::shared_ptr<CType> Parser::DirectDeclaratorArraySuffix(std::shared_ptr<CType> baseType, bool isGlobal) {
     if (tok.tokenType != TokenType::l_bracket) {
         return baseType;
     }
@@ -140,42 +165,69 @@ std::shared_ptr<CType> Parser::DirectDeclaratorArraySuffix(std::shared_ptr<CType
     int count = tok.value;
     Consume(TokenType::number);
     Consume(TokenType::r_bracket);
-    return std::make_shared<CArrayType>(DirectDeclaratorArraySuffix(baseType), count);
+    return std::make_shared<CArrayType>(DirectDeclaratorArraySuffix(baseType, isGlobal), count);
 }
 
-std::shared_ptr<CType> Parser::DirectDeclaratorSuffix(std::shared_ptr<CType> baseType) {
+std::shared_ptr<CType> Parser::DirectDeclaratorFuncSuffix(Token iden, std::shared_ptr<CType> baseType, bool isGlobal) {
+    Consume(TokenType::l_parent);
+
+    std::vector<Param> params;
+    int i = 0;
+    while (tok.tokenType != TokenType::r_parent) {
+        if (i > 0 && (tok.tokenType == TokenType::comma)) {
+            Consume(TokenType::comma);
+        }
+
+        auto ty = ParseDeclSpec();
+        auto node = Declarator(ty, isGlobal);
+
+        Param p;
+        p.type = node->ty;
+        p.name = llvm::StringRef(node->tok.ptr, node->tok.len);
+
+        params.push_back(p);
+    }
+
+    Consume(TokenType::r_parent);
+
+    return std::make_shared<CFuncType>(baseType, params, llvm::StringRef(iden.ptr, iden.len));
+}
+
+std::shared_ptr<CType> Parser::DirectDeclaratorSuffix(Token iden, std::shared_ptr<CType> baseType, bool isGlobal) {
     if (tok.tokenType == TokenType::l_bracket) {
-        return DirectDeclaratorArraySuffix(baseType);
+        return DirectDeclaratorArraySuffix(baseType, isGlobal);
+    }else if (tok.tokenType == TokenType::l_parent) {
+        return DirectDeclaratorFuncSuffix(iden, baseType, isGlobal);
     }
     /// func
     return baseType;
 }
 
-std::shared_ptr<AstNode> Parser::DirectDeclarator(std::shared_ptr<CType> baseType) {
+std::shared_ptr<AstNode> Parser::DirectDeclarator(std::shared_ptr<CType> baseType, bool isGlobal) {
     std::shared_ptr<AstNode> declNode;
     if (tok.tokenType == TokenType::l_parent) {
         Token beginTok = tok;
         lexer.SaveState();
             sema.SetMode(Sema::Mode::Skip);
             Consume(TokenType::l_parent);
-            Declarator(CType::IntType);
+            Declarator(CType::IntType, isGlobal);
             Consume(TokenType::r_parent);
             
-            baseType = DirectDeclaratorSuffix(baseType); 
+            baseType = DirectDeclaratorSuffix(tok, baseType, isGlobal); 
 
         lexer.RestoreState();
         sema.SetMode(Sema::Mode::Normal);
         tok = beginTok;
 
         Consume(TokenType::l_parent);
-        declNode = Declarator(baseType);
+        declNode = Declarator(baseType, isGlobal);
         Consume(TokenType::r_parent);
-        DirectDeclaratorSuffix(CType::IntType);
+        DirectDeclaratorSuffix(tok, CType::IntType, isGlobal);
     }else if (tok.tokenType == TokenType::identifier){
         Token iden = tok;
         Consume(TokenType::identifier);
-        baseType = DirectDeclaratorSuffix(baseType);
-        declNode = sema.SemaVariableDeclNode(iden, baseType);
+        baseType = DirectDeclaratorSuffix(iden, baseType, isGlobal);
+        declNode = sema.SemaVariableDeclNode(iden, baseType, isGlobal);
     }else {
         GetDiagEngine().Report(llvm::SMLoc::getFromPointer(tok.ptr), diag::err_expected_ex, "identifier or '('");
     }
@@ -255,15 +307,15 @@ bool Parser::ParseInitializer(std::vector<std::shared_ptr<VariableDecl::InitValu
     return false;
 }
 
-std::shared_ptr<AstNode> Parser::Declarator(std::shared_ptr<CType> baseType) {
+std::shared_ptr<AstNode> Parser::Declarator(std::shared_ptr<CType> baseType, bool isGlobal) {
     while (tok.tokenType == TokenType::star) {
         Consume(TokenType::star);
         baseType = std::make_shared<CPointType>(baseType);
     }
-    return DirectDeclarator(baseType);
+    return DirectDeclarator(baseType, isGlobal);
 }
 
-std::shared_ptr<AstNode> Parser::ParseDeclStmt() {
+std::shared_ptr<AstNode> Parser::ParseDeclStmt(bool isGlobal) {
     
     auto baseTy = ParseDeclSpec();
 
@@ -283,7 +335,7 @@ std::shared_ptr<AstNode> Parser::ParseDeclStmt() {
         if (i++ > 0) {
             assert(Consume(TokenType::comma));
         }
-        decl->nodeVec.push_back(Declarator(baseTy));
+        decl->nodeVec.push_back(Declarator(baseTy, isGlobal));
     }
 
     Consume(TokenType::semi);
@@ -379,6 +431,16 @@ std::shared_ptr<AstNode> Parser::ParseContinueStmt() {
     Consume(TokenType::kw_continue);
     auto node = std::make_shared<ContinueStmt>();
     node->target = continueNodes.back();
+    Consume(TokenType::semi);
+    return node;
+}
+
+std::shared_ptr<AstNode> Parser::ParseReturnStmt() {
+    Consume(TokenType::kw_return);
+    auto node = std::make_shared<ReturnStmt>();
+    if (tok.tokenType != TokenType::semi) {
+        node->expr = ParseExpr();
+    }
     Consume(TokenType::semi);
     return node;
 }
@@ -580,6 +642,23 @@ std::shared_ptr<AstNode> Parser::ParsePostFixExpr() {
             continue;
         }
 
+        if (tok.tokenType == TokenType::l_parent) {
+            Consume(TokenType::l_parent);
+
+            std::vector<std::shared_ptr<AstNode>> args;
+            int i = 0;
+            while (tok.tokenType != TokenType::r_parent) {
+                if (i > 0 && (tok.tokenType == TokenType::comma)) {
+                    Consume(TokenType::comma);
+                }
+                args.push_back(ParseAssignExpr());
+            }
+
+            Consume(TokenType::r_parent);
+            left = sema.SemaFuncCall(left, args);
+            continue;
+        }
+
         break;
     }
     return left;
@@ -768,9 +847,7 @@ std::shared_ptr<CType> Parser::ParseType() {
         Consume(TokenType::star);
     }
 
-    if (tok.tokenType == TokenType::l_bracket) {
-         baseType = DirectDeclaratorArraySuffix(baseType);
-    }
+    baseType = DirectDeclaratorSuffix(tok, baseType, false);
     
     return baseType;
 }
@@ -782,6 +859,25 @@ bool Parser::IsTypeName(TokenType tokenType) {
         return true;
     }
     return false;
+}
+
+bool Parser::IsFuncDecl() {
+    sema.SetMode(Sema::Mode::Skip);
+    bool isFunc = false;
+    Token begin = tok;
+    lexer.SaveState();
+
+    auto baseType = ParseDeclSpec();
+    auto node = Declarator(baseType, true);
+
+    if (node->ty->GetKind() == CType::TY_Func) {
+        isFunc = true;
+    }
+
+    lexer.RestoreState();
+    tok = begin;
+    sema.SetMode(Sema::Mode::Normal);
+    return isFunc;
 }
 
 bool Parser::Expect(TokenType tokenType) {

@@ -11,7 +11,7 @@
 #include "llvm/ExecutionEngine/SectionMemoryManager.h"
 #include "llvm/IR/Verifier.h"
 #include "llvm/Support/TargetSelect.h"
-// #define JIT_TEST
+//#define JIT_TEST
 int main(int argc, char *argv[]) {
 #ifdef JIT_TEST
     llvm::InitializeNativeTarget();

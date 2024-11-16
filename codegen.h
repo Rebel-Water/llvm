@@ -9,7 +9,7 @@
 class CodeGen : public Visitor, public TypeVisitor {
 public:
     CodeGen(std::shared_ptr<Program> p) {
-        module = std::make_unique<llvm::Module>("expr", context);
+        module = std::make_unique<llvm::Module>(p->fileName, context);
         VisitProgram(p.get());
     }
 
@@ -24,8 +24,10 @@ private:
     llvm::Value * VisitIfStmt(IfStmt *p) override;
     llvm::Value * VisitForStmt(ForStmt *p) override;
     llvm::Value * VisitContinueStmt(ContinueStmt *p) override;
+    llvm::Value * VisitReturnStmt(ReturnStmt *p) override;
     llvm::Value * VisitBreakStmt(BreakStmt *p) override;
     llvm::Value * VisitVariableDecl(VariableDecl *decl) override;
+    llvm::Value * VisitFuncDecl(FuncDecl *decl) override;
     llvm::Value * VisitBinaryExpr(BinaryExpr *binaryExpr) override;
     llvm::Value * VisitNumberExpr(NumberExpr *factorExpr) override;
     llvm::Value * VisitUnaryExpr(UnaryExpr *expr) override;
@@ -35,6 +37,7 @@ private:
     llvm::Value * VisitPostSubscript(PostSubscript *expr) override;
     llvm::Value * VisitPostMemberDotExpr(PostMemberDotExpr *expr) override;
     llvm::Value * VisitPostMemberArrowExpr(PostMemberArrowExpr *expr) override;
+    llvm::Value * VisitPostFuncCall(PostFuncCall *expr) override;
     llvm::Value * VisitThreeExpr(ThreeExpr *expr) override;
     llvm::Value * VisitVariableAccessExpr(VariableAccessExpr *factorExpr) override;
 
@@ -42,6 +45,15 @@ private:
     llvm::Type * VisitPointType(CPointType *ty) override;
     llvm::Type * VisitArrayType(CArrayType *ty) override;
     llvm::Type * VisitRecordType(CRecordType *ty) override;
+    llvm::Type * VisitFuncType(CFuncType *ty) override;
+private:
+    void AddLocalVarToMap(llvm::Value *addr, llvm::Type *ty, llvm::StringRef name);
+    void AddGlobalVarToMap(llvm::Value *addr, llvm::Type *ty, llvm::StringRef name);
+    std::pair<llvm::Value *, llvm::Type *> GetVarByName(llvm::StringRef name);
+
+    void PushScope();
+    void PopScope();
+    void ClearVarScope();
 
 private:
     llvm::LLVMContext context;
@@ -52,5 +64,6 @@ private:
     llvm::DenseMap<AstNode *, llvm::BasicBlock *> breakBBs;
     llvm::DenseMap<AstNode *, llvm::BasicBlock *> continueBBs;
 
-    llvm::StringMap<std::pair<llvm::Value *, llvm::Type *>> varAddrTypeMap;
+    llvm::SmallVector<llvm::StringMap<std::pair<llvm::Value *, llvm::Type *>>> localVarMap;
+    llvm::StringMap<std::pair<llvm::Value *, llvm::Type *>> globalVarMap;
 };

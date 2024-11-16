@@ -6,7 +6,9 @@ PrintVisitor::PrintVisitor(std::shared_ptr<Program> program, llvm::raw_ostream *
 }
 
 llvm::Value * PrintVisitor::VisitProgram(Program *p) {
-    p->node->Accept(this);
+    for (const auto &decl : p->externalDecls) {
+        decl->Accept(this);
+    }
     return nullptr;
 }
 
@@ -71,6 +73,15 @@ llvm::Value * PrintVisitor::VisitContinueStmt(ContinueStmt *p) {
     return nullptr;
 }
 
+llvm::Value * PrintVisitor::VisitReturnStmt(ReturnStmt *p) {
+    *out << "return ";
+    if (p->expr) {
+        p->expr->Accept(this);
+    }
+
+    return nullptr;
+}
+
 llvm::Value * PrintVisitor::VisitBreakStmt(BreakStmt *p) {
     *out << "break";
     return nullptr;
@@ -90,6 +101,16 @@ llvm::Value * PrintVisitor::VisitVariableDecl(VariableDecl *decl) {
             *out << ",";
         }
         ++i;
+    }
+    return nullptr;
+}
+
+llvm::Value * PrintVisitor::VisitFuncDecl(FuncDecl *decl) {
+    decl->ty->Accept(this);
+    if (decl->blockStmt) {
+        decl->blockStmt->Accept(this);
+    }else {
+        *out << ";";
     }
     return nullptr;
 }
@@ -320,6 +341,20 @@ llvm::Value * PrintVisitor::VisitPostMemberArrowExpr(PostMemberArrowExpr *expr) 
     return nullptr;
 }
 
+llvm::Value * PrintVisitor::VisitPostFuncCall(PostFuncCall *expr) {
+    expr->left->Accept(this);
+    *out << "(";
+    int i = 0, size = expr->args.size();
+    for (const auto &arg : expr->args) {
+        arg->Accept(this);
+        if (i < size - 1) {
+            *out << ",";
+        }
+    }
+    *out << ")";
+    return nullptr;
+}
+
 llvm::Value * PrintVisitor::VisitThreeExpr(ThreeExpr *expr) {
     expr->cond->Accept(this);
     *out<<"?";
@@ -368,5 +403,20 @@ llvm::Type * PrintVisitor::VisitRecordType(CRecordType *ty) {
     }
     *out << "} ";
 
+    return nullptr;
+}
+
+llvm::Type * PrintVisitor::VisitFuncType(CFuncType *ty) {
+    ty->GetRetType()->Accept(this);
+    *out << ty->GetName() << "(";
+    int i = 0, size = ty->GetParams().size();
+    for (const auto &p : ty->GetParams()) {
+        p.type->Accept(this);
+        *out << p.name;
+        if (i < size - 1) {
+            *out << ",";
+        }
+    }
+    *out << ")";
     return nullptr;
 }

@@ -89,3 +89,8 @@ void CRecordType::UpdateUnionOffset() {
     align = max_align;
     maxElementIdx = max_element_idx;
 }
+
+CFuncType::CFuncType(std::shared_ptr<CType> retType, const std::vector<Param>& params, llvm::StringRef name) 
+ : CType(CType::TY_Func, 1, 1), retType(retType), params(params), name(name) {
+
+}

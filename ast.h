@@ -7,6 +7,7 @@
 
 class Program;
 class VariableDecl;
+class FuncDecl;
 class BinaryExpr;
 class ThreeExpr;
 class UnaryExpr;
@@ -16,6 +17,7 @@ class PostDecExpr;
 class PostSubscript;
 class PostMemberDotExpr;
 class PostMemberArrowExpr;
+class PostFuncCall;
 class NumberExpr;
 class VariableAccessExpr;
 class IfStmt;
@@ -24,6 +26,7 @@ class BlockStmt;
 class ForStmt;
 class BreakStmt;
 class ContinueStmt;
+class ReturnStmt;
 
 
 class Visitor {
@@ -36,7 +39,9 @@ public:
     virtual llvm::Value * VisitForStmt(ForStmt *p) = 0;
     virtual llvm::Value * VisitBreakStmt(BreakStmt *p) = 0;
     virtual llvm::Value * VisitContinueStmt(ContinueStmt *p) = 0;
+    virtual llvm::Value * VisitReturnStmt(ReturnStmt *p) = 0;
     virtual llvm::Value * VisitVariableDecl(VariableDecl *decl) = 0;
+    virtual llvm::Value * VisitFuncDecl(FuncDecl *decl) = 0;
     virtual llvm::Value * VisitNumberExpr(NumberExpr *expr) = 0;
     virtual llvm::Value * VisitBinaryExpr(BinaryExpr *binaryExpr) = 0;
     virtual llvm::Value * VisitUnaryExpr(UnaryExpr *expr) = 0;
@@ -46,6 +51,7 @@ public:
     virtual llvm::Value * VisitPostSubscript(PostSubscript *expr) = 0;
     virtual llvm::Value * VisitPostMemberDotExpr(PostMemberDotExpr *expr) = 0;
     virtual llvm::Value * VisitPostMemberArrowExpr(PostMemberArrowExpr *expr) = 0;
+    virtual llvm::Value * VisitPostFuncCall(PostFuncCall *expr) = 0;
     virtual llvm::Value * VisitThreeExpr(ThreeExpr *expr) = 0;
     virtual llvm::Value * VisitVariableAccessExpr(VariableAccessExpr *factorExpr) = 0;
 };
@@ -60,7 +66,9 @@ public:
         ND_BreakStmt,
         ND_ContinueStmt,
         ND_IfStmt,
+        ND_ReturnStmt,
         ND_VariableDecl,
+        ND_FuncDecl,
         ND_BinaryExpr,
         ND_ThreeExpr,
         ND_UnaryExpr,
@@ -70,6 +78,7 @@ public:
         ND_PostSubscript,
         ND_PostMemberDotExpr,
         ND_PostMemberArrowExpr,
+        ND_PostFuncCall,
         ND_NumberExpr,
         ND_VariableAccessExpr
     };
@@ -186,6 +195,21 @@ public:
     }
 };
 
+class ReturnStmt : public AstNode {
+public:
+    std::shared_ptr<AstNode> expr{nullptr};
+public:
+    ReturnStmt():AstNode(ND_ReturnStmt) {}
+
+    llvm::Value * Accept(Visitor *v) override {
+        return v->VisitReturnStmt(this);
+    }
+
+    static bool classof(const AstNode *node) {
+        return node->GetKind() == ND_ReturnStmt;
+    }
+};
+
 class VariableDecl : public AstNode {
 public:
     struct InitValue {
@@ -194,6 +218,7 @@ public:
         std::vector<int> offsetList;
     };
     std::vector<std::shared_ptr<InitValue>> initValues;
+    bool isGlobal{false};
     VariableDecl():AstNode(ND_VariableDecl) {}
 
     llvm::Value * Accept(Visitor *v) override {
@@ -202,6 +227,20 @@ public:
 
     static bool classof(const AstNode *node) {
         return node->GetKind() == ND_VariableDecl;
+    }
+};
+
+class FuncDecl : public AstNode {
+public:
+    std::shared_ptr<AstNode> blockStmt{nullptr};
+    FuncDecl():AstNode(ND_FuncDecl) {}
+
+    llvm::Value * Accept(Visitor *v) override {
+        return v->VisitFuncDecl(this);
+    }
+
+    static bool classof(const AstNode *node) {
+        return node->GetKind() == ND_FuncDecl;
     }
 };
 
@@ -380,6 +419,20 @@ public:
     }
 };
 
+class PostFuncCall : public AstNode {
+public:
+    std::shared_ptr<AstNode> left;
+    std::vector<std::shared_ptr<AstNode>> args;
+    PostFuncCall() : AstNode(ND_PostFuncCall) {}
+    llvm::Value * Accept(Visitor *v) override {
+        return v->VisitPostFuncCall(this);
+    }
+
+    static bool classof(const AstNode *node) {
+        return node->GetKind() == ND_PostFuncCall;
+    }
+};
+
 class NumberExpr : public AstNode{
 public:
     NumberExpr():AstNode(ND_NumberExpr){}
@@ -404,5 +457,6 @@ public:
 
 class Program {
 public:
-    std::shared_ptr<AstNode> node;
+    llvm::StringRef fileName;
+    std::vector<std::shared_ptr<AstNode>> externalDecls;
 };

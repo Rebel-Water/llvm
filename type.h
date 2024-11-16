@@ -6,6 +6,7 @@ class CPrimaryType;
 class CPointType;
 class CArrayType;
 class CRecordType;
+class CFuncType;
 
 class TypeVisitor {
 public:
@@ -14,6 +15,7 @@ public:
     virtual llvm::Type * VisitPointType(CPointType *ty) = 0;
     virtual llvm::Type * VisitArrayType(CArrayType *ty) = 0;
     virtual llvm::Type * VisitRecordType(CRecordType *ty) = 0;
+    virtual llvm::Type * VisitFuncType(CFuncType *ty) = 0;
 };
 
 enum class TagKind {
@@ -28,6 +30,7 @@ public:
         TY_Point,
         TY_Array,
         TY_Record,
+        TY_Func,
     };
 protected:
     Kind kind;
@@ -150,4 +153,38 @@ public:
 private:
     void UpdateStructOffset();
     void UpdateUnionOffset();
+};
+
+struct Param {
+    std::shared_ptr<CType> type;
+    llvm::StringRef name;
+};
+
+class CFuncType : public CType {
+private:
+    std::shared_ptr<CType> retType;
+    std::vector<Param> params;
+    llvm::StringRef name;
+public:
+    CFuncType(std::shared_ptr<CType> retType, const std::vector<Param>& params, llvm::StringRef name);
+    
+    const llvm::StringRef GetName() {
+        return name;
+    }
+
+    const std::vector<Param> &GetParams() {
+        return params;
+    }
+
+    std::shared_ptr<CType> GetRetType() {
+        return retType;
+    }
+
+    llvm::Type * Accept(TypeVisitor *v) override {
+        return v->VisitFuncType(this);
+    }
+
+    static bool classof(const CType *ty) {
+        return ty->GetKind() == TY_Func;
+    }
 };
