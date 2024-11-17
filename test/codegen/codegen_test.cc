@@ -427,3 +427,47 @@ int main() {
     )", 840);
     ASSERT_EQ(res, true);
 }
+
+// TEST(CodeGenTest, func5) {
+//     bool res = TestProgramUseJit(R"(
+//     struct A {
+//         int x, y;
+//     };
+//     struct A f() {
+//         struct A a;
+//         a.x = 1;
+//         return a;
+//     }
+//     int main() {
+//         int ret = f().x;
+//         return ret;
+//     }
+//     )", 1);
+//     ASSERT_EQ(res, true);
+// }
+
+// TEST(CodeGenTest, func6) {
+//     bool res = TestProgramUseJit(R"(
+//     int f() {
+//         return 2;
+//     }
+//     int main() {
+//         int (*p) = f;
+//         return p();
+//     }
+//     )", 2);
+//     ASSERT_EQ(res, true);
+// }
+
+TEST(CodeGenTest, func7) {
+    bool res = TestProgramUseJit(R"(
+    int f(int (*a)[2]) {
+        return 2;
+    }
+    int main() {
+        int p[4][2];
+        return f(p);
+    }
+    )", 2);
+    ASSERT_EQ(res, true);
+}
